@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { Loader2, ShieldCheck, Trash2, UserPlus } from "lucide-react"
+import { Clock, Loader2, MailCheck, RotateCw, Send, ShieldCheck, Trash2, UserPlus } from "lucide-react"
 import { btnPrimary, cx, inputCls, Modal, Pills, Tile } from "@/components/ui/bento"
-import { db, ROL_LABEL, ROLES, type Miembro, type Rol } from "@/lib/panel"
+import { db, hace, invitarMiembro, ROL_LABEL, ROLES, type Miembro, type Rol } from "@/lib/panel"
 
 export const rolBadge: Record<Rol, string> = {
   voluntario: "bg-sky-400/15 text-sky-300",
@@ -32,6 +32,18 @@ export function EquipoTile({
   const [agregando, setAgregando] = React.useState(false)
   const [ocupado, setOcupado] = React.useState<string | null>(null)
   const [error, setError] = React.useState<string | null>(null)
+  const [aviso, setAviso] = React.useState<string | null>(null)
+
+  async function reenviar(m: Miembro) {
+    if (!m.email) return
+    setOcupado(m.user_id)
+    setError(null)
+    setAviso(null)
+    const r = await invitarMiembro({ email: m.email, accion: "reenviar" })
+    setOcupado(null)
+    if (!r.ok) return setError(r.error)
+    setAviso(r.mensaje)
+  }
 
   async function cambiarRol(m: Miembro, rol: Rol) {
     if (rol === m.rol) return
@@ -84,6 +96,11 @@ export function EquipoTile({
           {error}
         </p>
       )}
+      {aviso && (
+        <p role="status" className="mb-3 rounded-xl bg-emerald-400/10 px-3 py-2 text-sm text-emerald-300">
+          {aviso}
+        </p>
+      )}
       <ul className="grid gap-2 md:grid-cols-2">
         {lista.map((m) => {
           const soyYo = m.user_id === yo
@@ -97,6 +114,27 @@ export function EquipoTile({
                   {m.nombre} {soyYo && <span className="text-[12px] text-muted-foreground">(tú)</span>}
                 </p>
                 <p className="truncate text-[12px] text-muted-foreground">{m.email ?? "—"}</p>
+                {m.verificado ? (
+                  <p className="mt-0.5 text-[11px] text-muted-foreground">
+                    {m.ultimo_acceso ? `Último acceso ${hace(m.ultimo_acceso)}` : "Aún no ha entrado"}
+                  </p>
+                ) : (
+                  <p className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/15 px-2 py-0.5 font-semibold text-amber-300">
+                      <Clock className="size-3" /> Pendiente de verificar
+                    </span>
+                    {!soyYo && (
+                      <button
+                        type="button"
+                        onClick={() => reenviar(m)}
+                        disabled={ocupado === m.user_id}
+                        className="inline-flex items-center gap-1 font-semibold text-accent hover:underline disabled:opacity-60"
+                      >
+                        <RotateCw className="size-3" /> Reenviar correo
+                      </button>
+                    )}
+                  </p>
+                )}
               </div>
               {soyYo ? (
                 <span className={cx("rounded-full px-2.5 py-0.5 text-[11px] font-semibold", rolBadge[m.rol])}>
@@ -143,28 +181,45 @@ function FormMiembro({ onHecho }: { onHecho: () => void }) {
   const [rol, setRol] = React.useState<Rol>("voluntario")
   const [guardando, setGuardando] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+  const [hecho, setHecho] = React.useState<string | null>(null)
 
   async function guardar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const d = new FormData(e.currentTarget)
     setGuardando(true)
     setError(null)
-    const { error } = await db().rpc("agregar_miembro", {
-      p_email: String(d.get("email")).trim(),
-      p_nombre: String(d.get("nombre")).trim(),
-      p_rol: rol,
+    const r = await invitarMiembro({
+      email: String(d.get("email")).trim(),
+      nombre: String(d.get("nombre")).trim(),
+      rol,
+      accion: "invitar",
     })
     setGuardando(false)
-    if (error) return setError(mensajeError(error.message))
-    onHecho()
+    if (!r.ok) return setError(r.error)
+    setHecho(r.mensaje)
   }
+
+  if (hecho)
+    return (
+      <div className="py-4 text-center">
+        <span className="mx-auto grid size-14 place-items-center rounded-full bg-muted text-accent">
+          <MailCheck className="size-7" />
+        </span>
+        <p className="mx-auto mt-4 max-w-sm text-sm">{hecho}</p>
+        <p className="mx-auto mt-2 max-w-sm text-[12px] text-muted-foreground">
+          Hasta que confirme su correo aparecerá como «Pendiente de verificar».
+        </p>
+        <button type="button" onClick={onHecho} className={`${btnPrimary} mt-5 px-6`}>
+          Entendido
+        </button>
+      </div>
+    )
 
   return (
     <form onSubmit={guardar} className="space-y-4">
       <p className="rounded-xl bg-muted/60 px-3.5 py-3 text-[13px] text-muted-foreground">
-        La persona necesita una cuenta. Créala en Supabase →{" "}
-        <strong className="text-foreground">Authentication → Users → Add user</strong> con su correo y una
-        contraseña, y después dale acceso aquí.
+        Le enviaremos un <strong className="text-foreground">correo de confirmación</strong>. Cuando lo abra,
+        verificará su correo y creará su contraseña para entrar al panel.
       </p>
       <div>
         <label htmlFor="m-nombre" className="mb-1.5 block text-sm font-medium">
@@ -174,22 +229,25 @@ function FormMiembro({ onHecho }: { onHecho: () => void }) {
       </div>
       <div>
         <label htmlFor="m-email" className="mb-1.5 block text-sm font-medium">
-          Correo de su cuenta
+          Correo
         </label>
-        <input id="m-email" name="email" type="email" required className={inputCls} />
+        <input id="m-email" name="email" type="email" required maxLength={160} className={inputCls} />
       </div>
       <div>
         <p className="mb-1.5 text-sm font-medium">Rol</p>
         <Pills label="Rol" value={rol} options={ROLES} onChange={setRol} render={(r) => ROL_LABEL[r]} />
       </div>
-      {error && <p className="text-sm text-red-300">{error}</p>}
-      <div className="flex gap-2">
-        <button type="submit" disabled={guardando} className={`${btnPrimary} flex-1 py-2.5`}>
-          {guardando && <Loader2 className="size-4 animate-spin" />} Dar acceso
-        </button>
-      </div>
+      {error && (
+        <p role="alert" className="rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          {error}
+        </p>
+      )}
+      <button type="submit" disabled={guardando} className={`${btnPrimary} w-full py-2.5`}>
+        {guardando ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+        Enviar invitación
+      </button>
       <p className="text-[12px] text-muted-foreground">
-        Si la persona ya estaba en el equipo, se actualizan su nombre y su rol.
+        Si la persona ya tenía una cuenta verificada, solo se le da acceso con el rol elegido.
       </p>
     </form>
   )

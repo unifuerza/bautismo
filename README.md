@@ -73,12 +73,24 @@ Los permisos se aplican en la base de datos (RLS + funciones `agregar_miembro`, 
 
 ### Dar acceso a una persona
 
-1. Supabase → **Authentication → Users → Add user → Create new user** (correo + contraseña, marcar *Auto Confirm User*).
-2. En el panel, sección **Equipo → Dar acceso** (coordinador o staff), con su correo, nombre y rol.
+En el panel, sección **Equipo → Dar acceso** (coordinador o staff): nombre, correo y rol.
+La función `invitar-miembro` (Supabase Edge Function, código en `supabase/functions/`) crea la cuenta y
+envía un **correo de invitación**. La persona pulsa el enlace, su correo queda verificado y crea su
+contraseña en `/panel/activar`. Mientras no lo haga aparece como «Pendiente de verificar» (con botón para
+reenviar el correo) y no puede entrar.
 
-El primer coordinador hay que añadirlo desde **SQL Editor**:
+`/panel/activar` también sirve para «¿Olvidaste tu contraseña?».
 
-```sql
-insert into public.equipo (user_id, nombre, rol, email)
-select id, 'Nombre de la persona', 'coordinador', email from auth.users where email = 'correo@ejemplo.com';
-```
+### Configuración necesaria en Supabase (una sola vez)
+
+1. **Authentication → URL Configuration**
+   - *Site URL*: `https://bautismo-beige.vercel.app`
+   - *Redirect URLs*: añadir `https://bautismo-beige.vercel.app/panel/activar`
+2. **Authentication → Emails → SMTP Settings**: activar un servidor SMTP propio (Gmail con contraseña de
+   aplicación, Resend, Brevo…). Sin esto, Supabase solo envía correos a los miembros de la organización de
+   Supabase y muy pocos por hora.
+3. **Authentication → Emails → Templates**: pegar `supabase/plantillas-correo/invitacion.html` en
+   *Invite user* (asunto: «Te han dado acceso al panel de bautismo») y
+   `supabase/plantillas-correo/recuperar-contrasena.html` en *Reset password*.
+4. **Authentication → Sign In / Providers**: desactivar *Allow new users to sign up* (las invitaciones
+   siguen funcionando).

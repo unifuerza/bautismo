@@ -36,9 +36,7 @@ async function cargarDatos(admin: boolean): Promise<Datos> {
     sb.from("inscripciones_bautismo").select("*").order("created_at", { ascending: false }),
     sb.from("batas_registro").select("*").order("created_at", { ascending: false }),
     sb.from("ajustes").select("valor").eq("clave", "batas_total").maybeSingle(),
-    admin
-      ? sb.from("equipo").select("user_id, nombre, rol, email, created_at")
-      : Promise.resolve({ data: [] as Miembro[], error: null }),
+    admin ? sb.rpc("listar_equipo") : Promise.resolve({ data: [] as Miembro[], error: null }),
   ])
   if (c.error || r.error) throw new Error("No se pudieron cargar los datos.")
   const candidatos = (c.data ?? []) as Candidato[]

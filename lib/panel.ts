@@ -24,6 +24,32 @@ export interface Miembro {
   rol: Rol
   email: string | null
   created_at: string
+  verificado: boolean
+  ultimo_acceso: string | null
+}
+
+/** Llama a la función del servidor que invita a una persona (o reenvía su invitación). */
+export async function invitarMiembro(datos: {
+  email: string
+  nombre?: string
+  rol?: Rol
+  accion?: "invitar" | "reenviar"
+}): Promise<{ ok: true; mensaje: string } | { ok: false; error: string }> {
+  const { data, error } = await db().functions.invoke("invitar-miembro", { body: datos })
+  if (error) {
+    let msg = "No se pudo enviar la invitación. Inténtalo de nuevo."
+    const ctx = (error as { context?: Response }).context
+    if (ctx && typeof ctx.json === "function") {
+      try {
+        const j = await ctx.json()
+        if (j?.error) msg = j.error
+      } catch {
+        /* mensaje genérico */
+      }
+    }
+    return { ok: false, error: msg }
+  }
+  return { ok: true, mensaje: (data as { mensaje: string }).mensaje }
 }
 
 export type Sexo = "hombre" | "mujer"
