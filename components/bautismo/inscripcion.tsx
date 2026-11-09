@@ -60,7 +60,7 @@ export function Inscripcion() {
           </h2>
           <p className="mt-5 max-w-lg text-lg text-muted-foreground">
             Déjanos tus datos y un miembro del equipo pastoral se comunicará contigo para
-            acompañarte en tu preparación.
+            acompañarte en este paso.
           </p>
           <div className="mt-10 aspect-[16/10] overflow-hidden rounded-3xl bg-gradient-to-br from-sky-200 to-primary/30">
             {/* eslint-disable-next-line @next/next/no-img-element */}

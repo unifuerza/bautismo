@@ -32,7 +32,7 @@ Variables de entorno (ver `.env.example`), necesarias en local (`.env.local`) y 
 
 Seguridad (RLS): los visitantes solo pueden **insertar** inscripciones; no pueden leerlas, editarlas ni borrarlas.
 Para ver las inscripciones, entra al panel de Supabase → Table Editor → `inscripciones_bautismo`.
-La columna `estado` (`nuevo`, `contactado`, `en_clase`, `bautizado`) sirve para dar seguimiento.
+La columna `estado` (`nuevo`, `contactado`, `bautizado`) sirve para dar seguimiento.
 
 ## Tipografías
 

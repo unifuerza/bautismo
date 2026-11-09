@@ -102,10 +102,6 @@ const pasos = [
     text: "El bautismo es para quien ha creído en Cristo y ha decidido seguirle. Si aún tienes preguntas, conversemos.",
   },
   {
-    title: "Clase de preparación",
-    text: "Asiste a nuestras clases donde estudiamos juntos qué significa el bautismo y la vida cristiana.",
-  },
-  {
     title: "Conversación pastoral",
     text: "Un pastor o líder se reunirá contigo para escuchar tu testimonio y orar contigo.",
   },
@@ -122,14 +118,14 @@ export function Pasos() {
         <div className="max-w-2xl">
           <Eyebrow>Cómo prepararte</Eyebrow>
           <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            Cuatro pasos hacia las aguas
+            Tres pasos hacia las aguas
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
             No tienes que tenerlo todo resuelto. Te acompañamos en cada etapa del camino.
           </p>
         </div>
 
-        <ol className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-14 grid gap-5 md:grid-cols-3">
           {pasos.map((p, i) => (
             <li
               key={p.title}
@@ -157,12 +153,11 @@ const traer = [
 ]
 
 export function ProximoBautismo() {
-  const { fecha, hora, lugar, claseDePreparacion } = site.proximoBautismo
+  const { fecha, hora, lugar } = site.proximoBautismo
   const detalles = [
     { icon: CalendarDays, label: "Fecha", value: fecha },
     { icon: Clock, label: "Hora", value: hora },
     { icon: MapPin, label: "Lugar", value: lugar },
-    { icon: BookOpen, label: "Clases de preparación", value: claseDePreparacion },
   ]
 
   return (
@@ -191,7 +186,7 @@ export function ProximoBautismo() {
 
               <dl className="mt-8 grid gap-5 sm:grid-cols-2">
                 {detalles.map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="flex gap-3">
+                  <div key={label} className="flex gap-3 sm:last:col-span-2">
                     <Icon className="mt-0.5 size-5 shrink-0 text-accent" />
                     <div>
                       <dt className="font-label text-base uppercase tracking-wider text-white/50">{label}</dt>
@@ -245,7 +240,7 @@ const preguntas = [
   },
   {
     q: "¿Tiene algún costo?",
-    a: "No. El bautismo y las clases de preparación son completamente gratuitos.",
+    a: "No. El bautismo es completamente gratuito.",
   },
   {
     q: "Me da nervios hablar en público, ¿tengo que dar un testimonio?",

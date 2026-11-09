@@ -9,7 +9,6 @@ export const site = {
     fecha: "Domingo 6 de diciembre de 2026",
     hora: "10:00 a.m.",
     lugar: "Templo principal — Centro de Ayuda Cristiano",
-    claseDePreparacion: "Sábados 14, 21 y 28 de noviembre · 4:00 p.m.",
   },
   contacto: {
     direccion: "Dirección de la iglesia (editar en lib/site.ts)",
