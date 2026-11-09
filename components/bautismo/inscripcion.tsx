@@ -1,34 +1,50 @@
 "use client"
 
 import { useState } from "react"
-import { Check, Send } from "lucide-react"
+import { Check, Loader2, Send } from "lucide-react"
 import { site } from "@/lib/site"
+import { supabase } from "@/lib/supabase"
 
 const field =
   "w-full rounded-xl border border-input bg-background px-4 py-3 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
 
+const texto = (v: FormDataEntryValue | null) => {
+  const s = String(v ?? "").trim()
+  return s === "" ? null : s
+}
+
 export function Inscripcion() {
   const [enviado, setEnviado] = useState(false)
+  const [enviando, setEnviando] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  // Sin servidor: la inscripción se envía como mensaje de WhatsApp a la iglesia.
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  // La inscripción se guarda en la tabla inscripciones_bautismo de Supabase.
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setError(null)
     const d = new FormData(e.currentTarget)
-    const texto = [
-      "¡Hola! Quiero inscribirme para el bautismo.",
-      `Nombre: ${d.get("nombre")}`,
-      `Teléfono: ${d.get("telefono")}`,
-      d.get("email") ? `Correo: ${d.get("email")}` : null,
-      `¿He recibido a Jesús?: ${d.get("fe")}`,
-      d.get("mensaje") ? `Mensaje: ${d.get("mensaje")}` : null,
-    ]
-      .filter(Boolean)
-      .join("\n")
-    window.open(
-      `https://wa.me/${site.contacto.whatsapp}?text=${encodeURIComponent(texto)}`,
-      "_blank",
-      "noopener,noreferrer"
-    )
+
+    if (!supabase) {
+      setError("El formulario no está configurado todavía. Escríbenos por teléfono o correo.")
+      return
+    }
+
+    setEnviando(true)
+    const { error } = await supabase.from("inscripciones_bautismo").insert({
+      nombre: texto(d.get("nombre")),
+      telefono: texto(d.get("telefono")),
+      email: texto(d.get("email")),
+      fe: texto(d.get("fe")),
+      mensaje: texto(d.get("mensaje")),
+    })
+    setEnviando(false)
+
+    if (error) {
+      setError(
+        `No pudimos enviar tu inscripción. Inténtalo de nuevo o llámanos al ${site.contacto.telefono}.`
+      )
+      return
+    }
     setEnviado(true)
   }
 
@@ -65,8 +81,8 @@ export function Inscripcion() {
               </span>
               <h3 className="mt-5 font-serif text-3xl font-semibold">¡Gracias por tu decisión!</h3>
               <p className="mx-auto mt-3 max-w-sm text-muted-foreground">
-                Envía el mensaje que se abrió en WhatsApp para completar tu inscripción. Pronto
-                nos pondremos en contacto contigo.
+                Recibimos tu inscripción. Un miembro del equipo pastoral se pondrá en contacto
+                contigo muy pronto.
               </p>
               <button
                 type="button"
@@ -82,7 +98,15 @@ export function Inscripcion() {
                 <label htmlFor="nombre" className="mb-1.5 block text-sm font-medium">
                   Nombre completo
                 </label>
-                <input id="nombre" name="nombre" required autoComplete="name" className={field} />
+                <input
+                  id="nombre"
+                  name="nombre"
+                  required
+                  minLength={2}
+                  maxLength={120}
+                  autoComplete="name"
+                  className={field}
+                />
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
@@ -94,6 +118,8 @@ export function Inscripcion() {
                     name="telefono"
                     type="tel"
                     required
+                    minLength={5}
+                    maxLength={30}
                     autoComplete="tel"
                     className={field}
                   />
@@ -106,6 +132,7 @@ export function Inscripcion() {
                     id="email"
                     name="email"
                     type="email"
+                    maxLength={160}
                     autoComplete="email"
                     className={field}
                   />
@@ -137,13 +164,27 @@ export function Inscripcion() {
                 <label htmlFor="mensaje" className="mb-1.5 block text-sm font-medium">
                   ¿Algo que quieras contarnos? <span className="text-muted-foreground">(opcional)</span>
                 </label>
-                <textarea id="mensaje" name="mensaje" rows={4} className={field} />
+                <textarea id="mensaje" name="mensaje" rows={4} maxLength={2000} className={field} />
               </div>
+              {error && (
+                <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </p>
+              )}
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-primary-foreground transition hover:bg-primary/90"
+                disabled={enviando}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-70"
               >
-                <Send className="size-4" /> Enviar inscripción
+                {enviando ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" /> Enviando…
+                  </>
+                ) : (
+                  <>
+                    <Send className="size-4" /> Enviar inscripción
+                  </>
+                )}
               </button>
             </form>
           )}
