@@ -47,3 +47,22 @@ Todas con licencia SIL Open Font License 1.1 (libres para uso web y comercial):
 | Nombre de la iglesia | Righteous | `@fontsource/righteous` |
 
 Los tokens están en `app/globals.css` (`--font-sans`, `--font-serif`, `--font-display`, `--font-label`, `--font-brand`).
+
+## Panel interno (`/panel`)
+
+Panel privado para el grupo de bautismo (diseño "bento" adaptado de Web3 Bento; piezas base en `components/ui/bento.tsx`).
+
+- **Acceso:** correo y contraseña (Supabase Auth). Solo entran los usuarios que estén en la tabla `equipo`.
+- **Quién se va a bautizar:** nombre completo, teléfono, fecha de nacimiento, estado, fecha del bautismo y foto (se sube cuando la persona está bautizada; bucket privado `fotos-bautismo`).
+- **Batas:** total de batas, cuántas están planchadas y registro de planchado/uso (`batas_registro`, `ajustes.batas_total`).
+- **Libro del bautismo:** PDF privado (bucket `libro-bautismo`) que se lee dentro del panel, y casilla "ha leído el libro" por candidato.
+
+### Dar acceso a una persona
+
+1. Supabase → **Authentication → Users → Add user → Create new user** (correo + contraseña, marcar *Auto Confirm User*).
+2. Añadirla al equipo en **SQL Editor**:
+
+```sql
+insert into public.equipo (user_id, nombre)
+select id, 'Nombre de la persona' from auth.users where email = 'correo@ejemplo.com';
+```

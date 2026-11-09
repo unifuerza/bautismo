@@ -20,6 +20,26 @@
   --deep: #06081e;
 }
 
+/* Tema oscuro del panel interno */
+.dark {
+  --background: #050a1c;
+  --foreground: #e9eefb;
+  --card: #0c1330;
+  --card-foreground: #e9eefb;
+  --primary: #5b8cff;
+  --primary-foreground: #ffffff;
+  --secondary: #141d42;
+  --secondary-foreground: #e9eefb;
+  --muted: #18224a;
+  --muted-foreground: #93a0c4;
+  --accent: #96d7ff;
+  --accent-foreground: #06081e;
+  --border: #1d2852;
+  --input: #2a376a;
+  --ring: #96d7ff;
+  color-scheme: dark;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
