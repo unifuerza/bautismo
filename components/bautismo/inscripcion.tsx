@@ -59,7 +59,7 @@ export function Inscripcion() {
             ¿Listo para dar el paso?
           </h2>
           <p className="mt-5 max-w-lg text-lg text-muted-foreground">
-            Déjanos tus datos y un miembro del equipo pastoral se comunicará contigo para
+            Déjanos tus datos y alguien de nuestro grupo de bautismo se comunicará contigo para
             acompañarte en este paso.
           </p>
           <div className="mt-10 aspect-[16/10] overflow-hidden rounded-3xl bg-gradient-to-br from-sky-200 to-primary/30">
@@ -81,7 +81,7 @@ export function Inscripcion() {
               </span>
               <h3 className="mt-5 font-serif text-3xl font-semibold tracking-tight">¡Gracias por tu decisión!</h3>
               <p className="mx-auto mt-3 max-w-sm text-muted-foreground">
-                Recibimos tu inscripción. Un miembro del equipo pastoral se pondrá en contacto
+                Recibimos tu inscripción. Alguien de nuestro grupo de bautismo se pondrá en contacto
                 contigo muy pronto.
               </p>
               <button

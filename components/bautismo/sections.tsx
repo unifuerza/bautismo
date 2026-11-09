@@ -102,8 +102,8 @@ const pasos = [
     text: "El bautismo es para quien ha creído en Cristo y ha decidido seguirle. Si aún tienes preguntas, conversemos.",
   },
   {
-    title: "Conversación pastoral",
-    text: "Un pastor o líder se reunirá contigo para escuchar tu testimonio y orar contigo.",
+    title: "Conoce al grupo de bautismo",
+    text: "Nuestro grupo de bautismo se reunirá contigo para escuchar tu testimonio, resolver tus dudas y orar contigo.",
   },
   {
     title: "¡El día de tu bautismo!",
@@ -232,7 +232,7 @@ const preguntas = [
   },
   {
     q: "Ya fui bautizado de niño, ¿debo bautizarme de nuevo?",
-    a: "Creemos en el bautismo como una decisión personal de fe. Si fuiste bautizado antes de poder tomar esa decisión por ti mismo, te invitamos a conversar con un pastor para orar y decidir juntos.",
+    a: "Creemos en el bautismo como una decisión personal de fe. Si fuiste bautizado antes de poder tomar esa decisión por ti mismo, te invitamos a conversar con nuestro grupo de bautismo para orar y decidir juntos.",
   },
   {
     q: "¿Cómo se realiza el bautismo?",
