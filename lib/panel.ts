@@ -26,6 +26,9 @@ export interface Miembro {
   created_at: string
 }
 
+export type Sexo = "hombre" | "mujer"
+export const SEXO_LABEL: Record<Sexo, string> = { hombre: "Hombre", mujer: "Mujer" }
+
 export interface Candidato {
   id: string
   created_at: string
@@ -36,6 +39,7 @@ export interface Candidato {
   mensaje: string | null
   estado: Estado
   fecha_nacimiento: string | null
+  sexo: Sexo | null
   fecha_bautismo: string | null
   foto_path: string | null
   libro_leido: boolean

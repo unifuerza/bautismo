@@ -3,7 +3,17 @@
 import * as React from "react"
 import { BookCheck, Camera, ImageIcon, Loader2, Phone, Plus, Search, Trash2 } from "lucide-react"
 import { btnGhost, btnPrimary, cx, inputCls, Modal, Pills, Tile } from "@/components/ui/bento"
-import { db, edad, ESTADO_LABEL, ESTADOS, fechaCorta, FOTOS, type Candidato, type Estado } from "@/lib/panel"
+import {
+  db,
+  edad,
+  ESTADO_LABEL,
+  ESTADOS,
+  fechaCorta,
+  FOTOS,
+  SEXO_LABEL,
+  type Candidato,
+  type Estado,
+} from "@/lib/panel"
 
 type Filtro = "todos" | Estado
 
@@ -119,6 +129,7 @@ export function CandidatosTile({
                     <p className="truncate text-[14px] font-medium">{c.nombre}</p>
                     <p className="truncate text-[12px] text-muted-foreground">
                       {c.telefono}
+                      {c.sexo ? ` · ${SEXO_LABEL[c.sexo]}` : ""}
                       {e !== null ? ` · ${e} años` : " · sin fecha de nacimiento"}
                     </p>
                   </div>
@@ -189,6 +200,7 @@ function FichaCandidato({
       telefono: val("telefono"),
       email: val("email"),
       fecha_nacimiento: val("fecha_nacimiento"),
+      sexo: val("sexo"),
       fecha_bautismo: estado === "bautizado" ? val("fecha_bautismo") : null,
       libro_leido: d.get("libro_leido") === "on",
       estado,
@@ -290,6 +302,27 @@ function FichaCandidato({
             className={inputCls}
           />
         </div>
+
+        <fieldset>
+          <legend className="mb-1.5 text-sm font-medium">Sexo</legend>
+          <div className="flex flex-wrap gap-2">
+            {(["hombre", "mujer"] as const).map((v) => (
+              <label
+                key={v}
+                className="cursor-pointer rounded-full border border-input px-4 py-1.5 text-sm transition has-[:checked]:border-foreground has-[:checked]:bg-foreground has-[:checked]:text-background has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring"
+              >
+                <input
+                  type="radio"
+                  name="sexo"
+                  value={v}
+                  defaultChecked={candidato?.sexo === v}
+                  className="sr-only"
+                />
+                {SEXO_LABEL[v]}
+              </label>
+            ))}
+          </div>
+        </fieldset>
 
         <div>
           <p className="mb-1.5 text-sm font-medium">Estado</p>

@@ -36,11 +36,17 @@ export function Inscripcion() {
       return
     }
 
+    if (!d.get("sexo")) {
+      setError("Indica si eres hombre o mujer.")
+      return
+    }
+
     setEnviando(true)
     const { error } = await supabase.from("inscripciones_bautismo").insert({
       nombre: texto(d.get("nombre")),
       telefono: texto(d.get("telefono")),
       fecha_nacimiento: texto(d.get("fecha_nacimiento")),
+      sexo: texto(d.get("sexo")),
       email: texto(d.get("email")),
       fe: texto(d.get("fe")),
       mensaje: texto(d.get("mensaje")),
@@ -147,6 +153,29 @@ export function Inscripcion() {
                   />
                 </div>
               </div>
+              <fieldset>
+                <legend className="mb-1.5 text-sm font-medium">Sexo</legend>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    ["hombre", "Hombre"],
+                    ["mujer", "Mujer"],
+                  ].map(([valor, etiqueta], i) => (
+                    <label
+                      key={valor}
+                      className="cursor-pointer rounded-full border border-input px-5 py-2 text-sm transition has-[:checked]:border-primary has-[:checked]:bg-secondary has-[:checked]:text-primary has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-primary/15"
+                    >
+                      <input
+                        type="radio"
+                        name="sexo"
+                        value={valor}
+                        required={i === 0}
+                        className="sr-only"
+                      />
+                      {etiqueta}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
               <div>
                 <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
                   Correo <span className="text-muted-foreground">(opcional)</span>

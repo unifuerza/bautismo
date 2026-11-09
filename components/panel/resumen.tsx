@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { BookOpen, Shirt, UserCheck, Users } from "lucide-react"
+import { BookOpen, Shirt, UserCheck, Users, Users2 } from "lucide-react"
 import { EASE, Tile, useCountUp, useMounted } from "@/components/ui/bento"
 import type { Candidato } from "@/lib/panel"
 import { site } from "@/lib/site"
@@ -111,11 +111,14 @@ export function ProximoTile({ candidatos, planchadas }: { candidatos: Candidato[
   const pendientes = candidatos.filter((c) => c.estado !== "bautizado")
   const contactados = pendientes.filter((c) => c.estado === "contactado").length
   const leidos = pendientes.filter((c) => c.libro_leido).length
+  const hombres = pendientes.filter((c) => c.sexo === "hombre").length
+  const mujeres = pendientes.filter((c) => c.sexo === "mujer").length
   const batasOk = planchadas >= pendientes.length
   const ink = "#06122e"
 
   const filas: [React.ReactNode, string, string][] = [
     [<Users key="u" className="size-4" />, "Candidatos", String(pendientes.length)],
+    [<Users2 key="s" className="size-4" />, "Hombres · Mujeres", `${hombres} · ${mujeres}`],
     [<UserCheck key="c" className="size-4" />, "Contactados", `${contactados} de ${pendientes.length}`],
     [<BookOpen key="l" className="size-4" />, "Leyeron el libro", `${leidos} de ${pendientes.length}`],
     [
