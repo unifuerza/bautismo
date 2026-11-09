@@ -231,20 +231,12 @@ const preguntas = [
     a: "Toda persona que haya creído en Jesucristo como su Señor y Salvador y desee seguirle públicamente. Los niños pueden bautizarse cuando entienden y expresan su fe personal; conversamos con los padres en cada caso.",
   },
   {
-    q: "Ya fui bautizado de niño, ¿debo bautizarme de nuevo?",
-    a: "Creemos en el bautismo como una decisión personal de fe. Si fuiste bautizado antes de poder tomar esa decisión por ti mismo, te invitamos a conversar con nuestro grupo de bautismo para orar y decidir juntos.",
-  },
-  {
     q: "¿Cómo se realiza el bautismo?",
     a: "Por inmersión: el pastor te sumerge brevemente en el agua y te levanta, simbolizando la muerte a la vida pasada y la resurrección a una vida nueva en Cristo.",
   },
   {
     q: "¿Tiene algún costo?",
     a: "No. El bautismo es completamente gratuito.",
-  },
-  {
-    q: "Me da nervios hablar en público, ¿tengo que dar un testimonio?",
-    a: "No es obligatorio. Si deseas compartir unas palabras, te ayudamos a prepararlas; si no, tu bautismo ya es un hermoso testimonio por sí mismo.",
   },
   {
     q: "¿Puedo invitar a mi familia a ver el bautismo?",
