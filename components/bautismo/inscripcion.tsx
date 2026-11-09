@@ -29,10 +29,18 @@ export function Inscripcion() {
       return
     }
 
+    const nacimiento = String(d.get("fecha_nacimiento") ?? "")
+    const hoy = new Date().toLocaleDateString("en-CA") // AAAA-MM-DD en hora local
+    if (!nacimiento || nacimiento > hoy || nacimiento < "1900-01-01") {
+      setError("Revisa la fecha de nacimiento.")
+      return
+    }
+
     setEnviando(true)
     const { error } = await supabase.from("inscripciones_bautismo").insert({
       nombre: texto(d.get("nombre")),
       telefono: texto(d.get("telefono")),
+      fecha_nacimiento: texto(d.get("fecha_nacimiento")),
       email: texto(d.get("email")),
       fe: texto(d.get("fe")),
       mensaje: texto(d.get("mensaje")),
@@ -125,18 +133,32 @@ export function Inscripcion() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
-                    Correo <span className="text-muted-foreground">(opcional)</span>
+                  <label htmlFor="fecha_nacimiento" className="mb-1.5 block text-sm font-medium">
+                    Fecha de nacimiento
                   </label>
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    maxLength={160}
-                    autoComplete="email"
+                    id="fecha_nacimiento"
+                    name="fecha_nacimiento"
+                    type="date"
+                    required
+                    min="1900-01-01"
+                    autoComplete="bday"
                     className={field}
                   />
                 </div>
+              </div>
+              <div>
+                <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
+                  Correo <span className="text-muted-foreground">(opcional)</span>
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  maxLength={160}
+                  autoComplete="email"
+                  className={field}
+                />
               </div>
               <fieldset>
                 <legend className="mb-1.5 text-sm font-medium">
