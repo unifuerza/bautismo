@@ -1,0 +1,154 @@
+"use client"
+
+import { useState } from "react"
+import { Check, Send } from "lucide-react"
+import { site } from "@/lib/site"
+
+const field =
+  "w-full rounded-xl border border-input bg-background px-4 py-3 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
+
+export function Inscripcion() {
+  const [enviado, setEnviado] = useState(false)
+
+  // Sin servidor: la inscripción se envía como mensaje de WhatsApp a la iglesia.
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const d = new FormData(e.currentTarget)
+    const texto = [
+      "¡Hola! Quiero inscribirme para el bautismo.",
+      `Nombre: ${d.get("nombre")}`,
+      `Teléfono: ${d.get("telefono")}`,
+      d.get("email") ? `Correo: ${d.get("email")}` : null,
+      `¿He recibido a Jesús?: ${d.get("fe")}`,
+      d.get("mensaje") ? `Mensaje: ${d.get("mensaje")}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n")
+    window.open(
+      `https://wa.me/${site.contacto.whatsapp}?text=${encodeURIComponent(texto)}`,
+      "_blank",
+      "noopener,noreferrer"
+    )
+    setEnviado(true)
+  }
+
+  return (
+    <section id="inscripcion" className="scroll-mt-16 bg-background py-24 sm:py-32">
+      <div className="mx-auto grid max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:items-start">
+        <div>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+            Inscripción
+          </p>
+          <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+            ¿Listo para dar el paso?
+          </h2>
+          <p className="mt-5 max-w-lg text-lg text-muted-foreground">
+            Déjanos tus datos y un miembro del equipo pastoral se comunicará contigo para
+            acompañarte en tu preparación.
+          </p>
+          <div className="mt-10 aspect-[16/10] overflow-hidden rounded-3xl bg-gradient-to-br from-sky-200 to-primary/30">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80"
+              alt="Interior de una iglesia iluminado por la luz"
+              className="size-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        <div className="rounded-3xl border bg-card p-6 shadow-xl shadow-primary/5 sm:p-10">
+          {enviado ? (
+            <div className="py-10 text-center">
+              <span className="mx-auto grid size-14 place-items-center rounded-full bg-secondary text-primary">
+                <Check className="size-7" />
+              </span>
+              <h3 className="mt-5 font-serif text-3xl font-semibold">¡Gracias por tu decisión!</h3>
+              <p className="mx-auto mt-3 max-w-sm text-muted-foreground">
+                Envía el mensaje que se abrió en WhatsApp para completar tu inscripción. Pronto
+                nos pondremos en contacto contigo.
+              </p>
+              <button
+                type="button"
+                onClick={() => setEnviado(false)}
+                className="mt-6 text-sm font-semibold text-primary hover:underline"
+              >
+                Volver al formulario
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={onSubmit} className="space-y-5">
+              <div>
+                <label htmlFor="nombre" className="mb-1.5 block text-sm font-medium">
+                  Nombre completo
+                </label>
+                <input id="nombre" name="nombre" required autoComplete="name" className={field} />
+              </div>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="telefono" className="mb-1.5 block text-sm font-medium">
+                    Teléfono
+                  </label>
+                  <input
+                    id="telefono"
+                    name="telefono"
+                    type="tel"
+                    required
+                    autoComplete="tel"
+                    className={field}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
+                    Correo <span className="text-muted-foreground">(opcional)</span>
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    className={field}
+                  />
+                </div>
+              </div>
+              <fieldset>
+                <legend className="mb-1.5 text-sm font-medium">
+                  ¿Has recibido a Jesús como tu Salvador?
+                </legend>
+                <div className="flex flex-wrap gap-2">
+                  {["Sí", "Tengo dudas, quiero conversar"].map((op, i) => (
+                    <label
+                      key={op}
+                      className="cursor-pointer rounded-full border border-input px-4 py-2 text-sm transition has-[:checked]:border-primary has-[:checked]:bg-secondary has-[:checked]:text-primary"
+                    >
+                      <input
+                        type="radio"
+                        name="fe"
+                        value={op}
+                        defaultChecked={i === 0}
+                        className="sr-only"
+                      />
+                      {op}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+              <div>
+                <label htmlFor="mensaje" className="mb-1.5 block text-sm font-medium">
+                  ¿Algo que quieras contarnos? <span className="text-muted-foreground">(opcional)</span>
+                </label>
+                <textarea id="mensaje" name="mensaje" rows={4} className={field} />
+              </div>
+              <button
+                type="submit"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-primary-foreground transition hover:bg-primary/90"
+              >
+                <Send className="size-4" /> Enviar inscripción
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
