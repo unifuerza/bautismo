@@ -57,12 +57,28 @@ Panel privado para el grupo de bautismo (diseño "bento" adaptado de Web3 Bento;
 - **Batas:** total de batas, cuántas están planchadas y registro de planchado/uso (`batas_registro`, `ajustes.batas_total`).
 - **Libro del bautismo:** PDF privado (bucket `libro-bautismo`) que se lee dentro del panel, y casilla "ha leído el libro" por candidato.
 
+### Roles
+
+| Acción | Voluntario | Coordinador / Staff |
+|---|---|---|
+| Ver candidatos (nombre, teléfono, fecha de nacimiento, estado, foto) | ✓ | ✓ |
+| Añadir, editar o borrar candidatos; subir fotos | — | ✓ |
+| Registrar batas planchadas / usadas | ✓ | ✓ |
+| Borrar registros de batas; cambiar el total de batas | — | ✓ |
+| Leer el libro del bautismo | ✓ | ✓ |
+| Subir o reemplazar el PDF del libro | — | ✓ |
+| Gestionar el equipo (dar acceso, cambiar roles) | — | ✓ |
+
+Los permisos se aplican en la base de datos (RLS + funciones `agregar_miembro`, `cambiar_rol`, `quitar_miembro`), no solo en la interfaz. Nadie puede cambiar su propio rol ni quitarse el acceso.
+
 ### Dar acceso a una persona
 
 1. Supabase → **Authentication → Users → Add user → Create new user** (correo + contraseña, marcar *Auto Confirm User*).
-2. Añadirla al equipo en **SQL Editor**:
+2. En el panel, sección **Equipo → Dar acceso** (coordinador o staff), con su correo, nombre y rol.
+
+El primer coordinador hay que añadirlo desde **SQL Editor**:
 
 ```sql
-insert into public.equipo (user_id, nombre)
-select id, 'Nombre de la persona' from auth.users where email = 'correo@ejemplo.com';
+insert into public.equipo (user_id, nombre, rol, email)
+select id, 'Nombre de la persona', 'coordinador', email from auth.users where email = 'correo@ejemplo.com';
 ```

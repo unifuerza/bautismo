@@ -4,27 +4,41 @@ import * as React from "react"
 import { Droplets, ExternalLink, LogOut, RefreshCw } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { useReducedMotion } from "@/components/ui/bento"
-import { db, FOTOS, type Candidato, type RegistroBata } from "@/lib/panel"
+import {
+  db,
+  esAdmin,
+  FOTOS,
+  ROL_LABEL,
+  type Candidato,
+  type Miembro,
+  type RegistroBata,
+  type Rol,
+} from "@/lib/panel"
 import { site } from "@/lib/site"
 import { Cargando, Login, SinPermiso, useAcceso } from "./acceso"
 import { HeroTile, ProximoTile } from "./resumen"
 import { BatasTile, calcularPlanchadas, RegistroBatasTile } from "./batas"
 import { BautizadosTile, CandidatosTile } from "./candidatos"
 import { LibroTile } from "./libro"
+import { EquipoTile } from "./equipo"
 
 interface Datos {
   candidatos: Candidato[]
   registro: RegistroBata[]
   total: number
   fotos: Record<string, string>
+  equipo: Miembro[]
 }
 
-async function cargarDatos(): Promise<Datos> {
+async function cargarDatos(admin: boolean): Promise<Datos> {
   const sb = db()
-  const [c, r, a] = await Promise.all([
+  const [c, r, a, e] = await Promise.all([
     sb.from("inscripciones_bautismo").select("*").order("created_at", { ascending: false }),
     sb.from("batas_registro").select("*").order("created_at", { ascending: false }),
     sb.from("ajustes").select("valor").eq("clave", "batas_total").maybeSingle(),
+    admin
+      ? sb.from("equipo").select("user_id, nombre, rol, email, created_at")
+      : Promise.resolve({ data: [] as Miembro[], error: null }),
   ])
   if (c.error || r.error) throw new Error("No se pudieron cargar los datos.")
   const candidatos = (c.data ?? []) as Candidato[]
@@ -39,6 +53,7 @@ async function cargarDatos(): Promise<Datos> {
     registro: (r.data ?? []) as RegistroBata[],
     total: Number(a.data?.valor ?? 0),
     fotos,
+    equipo: (e.data ?? []) as Miembro[],
   }
 }
 
@@ -47,11 +62,12 @@ export function PanelApp() {
   if (acceso.estado === "cargando") return <Cargando />
   if (acceso.estado === "fuera") return <Login />
   if (acceso.estado === "sin-permiso") return <SinPermiso email={acceso.session.user.email} />
-  return <Dashboard nombre={acceso.nombre} />
+  return <Dashboard nombre={acceso.nombre} rol={acceso.rol} userId={acceso.session.user.id} />
 }
 
-function Dashboard({ nombre }: { nombre: string }) {
+function Dashboard({ nombre, rol, userId }: { nombre: string; rol: Rol; userId: string }) {
   const reduced = useReducedMotion()
+  const admin = esAdmin(rol)
   const [datos, setDatos] = React.useState<Datos | null>(null)
   const [error, setError] = React.useState<string | null>(null)
   const [recargando, setRecargando] = React.useState(false)
@@ -59,14 +75,14 @@ function Dashboard({ nombre }: { nombre: string }) {
   const recargar = React.useCallback(async () => {
     setRecargando(true)
     try {
-      setDatos(await cargarDatos())
+      setDatos(await cargarDatos(admin))
       setError(null)
     } catch (e) {
       setError((e as Error).message)
     } finally {
       setRecargando(false)
     }
-  }, [])
+  }, [admin])
 
   React.useEffect(() => {
     recargar()
@@ -106,8 +122,11 @@ function Dashboard({ nombre }: { nombre: string }) {
             >
               Ver la web <ExternalLink className="size-3" />
             </a>
-            <span className="rounded-full bg-foreground px-3 py-1.5 text-[12px] font-semibold text-background">
+            <span className="flex items-center gap-2 rounded-full bg-foreground py-1 pl-3 pr-1 text-[12px] font-semibold text-background">
               {nombre}
+              <span className="rounded-full bg-background px-2 py-0.5 text-[11px] text-foreground">
+                {ROL_LABEL[rol]}
+              </span>
             </span>
             <button
               type="button"
@@ -128,12 +147,24 @@ function Dashboard({ nombre }: { nombre: string }) {
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <HeroTile nombre={primerNombre} candidatos={datos.candidatos} reduced={reduced} />
-          <BatasTile total={datos.total} planchadas={planchadas} persona={nombre} onCambio={recargar} />
+          <BatasTile
+            total={datos.total}
+            planchadas={planchadas}
+            persona={nombre}
+            admin={admin}
+            onCambio={recargar}
+          />
           <ProximoTile candidatos={datos.candidatos} planchadas={planchadas} />
-          <CandidatosTile candidatos={datos.candidatos} fotos={datos.fotos} onCambio={recargar} />
-          <RegistroBatasTile registro={datos.registro} onCambio={recargar} />
-          <LibroTile candidatos={datos.candidatos} />
+          <CandidatosTile
+            candidatos={datos.candidatos}
+            fotos={datos.fotos}
+            admin={admin}
+            onCambio={recargar}
+          />
+          <RegistroBatasTile registro={datos.registro} admin={admin} onCambio={recargar} />
+          <LibroTile candidatos={datos.candidatos} admin={admin} />
           <BautizadosTile candidatos={datos.candidatos} fotos={datos.fotos} />
+          {admin && <EquipoTile miembros={datos.equipo} yo={userId} onCambio={recargar} />}
         </div>
       </div>
     </div>

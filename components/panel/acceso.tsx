@@ -6,12 +6,13 @@ import { Droplets, Loader2, LogIn, ShieldAlert } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { btnGhost, inputCls } from "@/components/ui/bento"
 import { site } from "@/lib/site"
+import type { Rol } from "@/lib/panel"
 
 export type Acceso =
   | { estado: "cargando" }
   | { estado: "fuera" }
   | { estado: "sin-permiso"; session: Session }
-  | { estado: "dentro"; session: Session; nombre: string }
+  | { estado: "dentro"; session: Session; nombre: string; rol: Rol }
 
 export function useAcceso(): Acceso {
   const [acceso, setAcceso] = React.useState<Acceso>({ estado: "cargando" })
@@ -28,11 +29,11 @@ export function useAcceso(): Acceso {
       if (!session) return vivo && setAcceso({ estado: "fuera" })
       const { data } = await sb
         .from("equipo")
-        .select("nombre")
+        .select("nombre, rol")
         .eq("user_id", session.user.id)
         .maybeSingle()
       if (!vivo) return
-      if (data) setAcceso({ estado: "dentro", session, nombre: data.nombre })
+      if (data) setAcceso({ estado: "dentro", session, nombre: data.nombre, rol: data.rol as Rol })
       else setAcceso({ estado: "sin-permiso", session })
     }
 

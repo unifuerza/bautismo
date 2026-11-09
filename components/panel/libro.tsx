@@ -6,7 +6,7 @@ import { btnGhost, btnPrimary, Modal, Tile } from "@/components/ui/bento"
 import { db, LIBRO, LIBRO_PATH, type Candidato } from "@/lib/panel"
 
 /** Sección de lectura del libro del bautismo (PDF privado). */
-export function LibroTile({ candidatos }: { candidatos: Candidato[] }) {
+export function LibroTile({ candidatos, admin }: { candidatos: Candidato[]; admin: boolean }) {
   const [url, setUrl] = React.useState<string | null | undefined>(undefined)
   const [leyendo, setLeyendo] = React.useState(false)
   const [subiendo, setSubiendo] = React.useState(false)
@@ -14,7 +14,9 @@ export function LibroTile({ candidatos }: { candidatos: Candidato[] }) {
   const input = React.useRef<HTMLInputElement>(null)
 
   const cargar = React.useCallback(async () => {
-    const { data } = await db().storage.from(LIBRO).createSignedUrl(LIBRO_PATH, 60 * 60)
+    const { data } = await db()
+      .storage.from(LIBRO)
+      .createSignedUrl(LIBRO_PATH, 60 * 60)
     setUrl(data?.signedUrl ?? null)
   }, [])
 
@@ -55,7 +57,10 @@ export function LibroTile({ candidatos }: { candidatos: Candidato[] }) {
           </div>
         </div>
         <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-muted">
-          <div className="h-full rounded-full bg-accent transition-[width] duration-700" style={{ width: `${pct * 100}%` }} />
+          <div
+            className="h-full rounded-full bg-accent transition-[width] duration-700"
+            style={{ width: `${pct * 100}%` }}
+          />
         </div>
 
         <div className="mt-auto space-y-2 pt-5">
@@ -66,24 +71,30 @@ export function LibroTile({ candidatos }: { candidatos: Candidato[] }) {
               <BookOpen className="size-4" /> Leer el libro
             </button>
           ) : (
-            <p className="text-sm text-muted-foreground">Sube el libro en PDF para leerlo aquí.</p>
+            <p className="text-sm text-muted-foreground">
+              {admin ? "Sube el libro en PDF para leerlo aquí." : "Todavía no se ha subido el libro."}
+            </p>
           )}
-          <input
-            ref={input}
-            type="file"
-            accept="application/pdf"
-            className="sr-only"
-            onChange={(e) => e.target.files?.[0] && subir(e.target.files[0])}
-          />
-          <button
-            type="button"
-            onClick={() => input.current?.click()}
-            disabled={subiendo}
-            className={`${btnGhost} w-full`}
-          >
-            {subiendo ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
-            {url ? "Reemplazar PDF" : "Subir PDF"}
-          </button>
+          {admin && (
+            <>
+              <input
+                ref={input}
+                type="file"
+                accept="application/pdf"
+                className="sr-only"
+                onChange={(e) => e.target.files?.[0] && subir(e.target.files[0])}
+              />
+              <button
+                type="button"
+                onClick={() => input.current?.click()}
+                disabled={subiendo}
+                className={`${btnGhost} w-full`}
+              >
+                {subiendo ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
+                {url ? "Reemplazar PDF" : "Subir PDF"}
+              </button>
+            </>
+          )}
           {error && <p className="text-[12px] text-red-300">{error}</p>}
         </div>
       </div>

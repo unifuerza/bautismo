@@ -3,16 +3,7 @@
 import * as React from "react"
 import { BookCheck, Camera, ImageIcon, Loader2, Phone, Plus, Search, Trash2 } from "lucide-react"
 import { btnGhost, btnPrimary, cx, inputCls, Modal, Pills, Tile } from "@/components/ui/bento"
-import {
-  db,
-  edad,
-  ESTADO_LABEL,
-  ESTADOS,
-  fechaCorta,
-  FOTOS,
-  type Candidato,
-  type Estado,
-} from "@/lib/panel"
+import { db, edad, ESTADO_LABEL, ESTADOS, fechaCorta, FOTOS, type Candidato, type Estado } from "@/lib/panel"
 
 type Filtro = "todos" | Estado
 
@@ -50,10 +41,12 @@ const badge: Record<Estado, string> = {
 export function CandidatosTile({
   candidatos,
   fotos,
+  admin,
   onCambio,
 }: {
   candidatos: Candidato[]
   fotos: Record<string, string>
+  admin: boolean
   onCambio: () => void
 }) {
   const [filtro, setFiltro] = React.useState<Filtro>("todos")
@@ -65,18 +58,21 @@ export function CandidatosTile({
       (filtro === "todos" || c.estado === filtro) &&
       (q === "" ||
         c.nombre.toLowerCase().includes(q.toLowerCase()) ||
-        c.telefono.replace(/\s/g, "").includes(q.replace(/\s/g, "")))
+        c.telefono.replace(/\s/g, "").includes(q.replace(/\s/g, ""))),
   )
-  const cuenta = (f: Filtro) => (f === "todos" ? candidatos.length : candidatos.filter((c) => c.estado === f).length)
+  const cuenta = (f: Filtro) =>
+    f === "todos" ? candidatos.length : candidatos.filter((c) => c.estado === f).length
 
   return (
     <Tile
       title="Quién se va a bautizar"
       className="sm:col-span-2 lg:col-span-2 lg:col-start-1 lg:row-span-2 lg:row-start-2"
       action={
-        <button type="button" onClick={() => setAbierto("nuevo")} className={btnPrimary}>
-          <Plus className="size-4" /> Añadir
-        </button>
+        admin && (
+          <button type="button" onClick={() => setAbierto("nuevo")} className={btnPrimary}>
+            <Plus className="size-4" /> Añadir
+          </button>
+        )
       }
     >
       <div className="flex flex-wrap items-center gap-3">
@@ -129,7 +125,12 @@ export function CandidatosTile({
                   {c.libro_leido && (
                     <BookCheck className="size-4 shrink-0 text-accent" aria-label="Leyó el libro" />
                   )}
-                  <span className={cx("shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold", badge[c.estado])}>
+                  <span
+                    className={cx(
+                      "shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold",
+                      badge[c.estado],
+                    )}
+                  >
                     {ESTADO_LABEL[c.estado]}
                   </span>
                 </button>
@@ -148,6 +149,7 @@ export function CandidatosTile({
           <FichaCandidato
             key={abierto === "nuevo" ? "nuevo" : abierto.id}
             candidato={abierto === "nuevo" ? null : abierto}
+            admin={admin}
             fotoUrl={abierto !== "nuevo" && abierto.foto_path ? fotos[abierto.foto_path] : undefined}
             onHecho={() => {
               setAbierto(null)
@@ -163,11 +165,13 @@ export function CandidatosTile({
 
 function FichaCandidato({
   candidato,
+  admin,
   fotoUrl,
   onHecho,
   onFoto,
 }: {
   candidato: Candidato | null
+  admin: boolean
   fotoUrl?: string
   onHecho: () => void
   onFoto: () => void
@@ -211,132 +215,160 @@ function FichaCandidato({
   }
 
   return (
-    <form onSubmit={guardar} className="space-y-4">
-      <div>
-        <label htmlFor="nombre" className="mb-1.5 block text-sm font-medium">
-          Nombre completo
-        </label>
-        <input
-          id="nombre"
-          name="nombre"
-          required
-          minLength={2}
-          maxLength={120}
-          defaultValue={candidato?.nombre}
-          className={inputCls}
-        />
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+    <form onSubmit={guardar}>
+      {!admin && (
+        <p className="mb-4 rounded-xl bg-muted/60 px-3.5 py-2.5 text-[13px] text-muted-foreground">
+          Solo lectura. Los cambios los hacen coordinadores y staff.
+        </p>
+      )}
+      <fieldset disabled={!admin} className="space-y-4">
         <div>
-          <label htmlFor="telefono" className="mb-1.5 block text-sm font-medium">
-            Teléfono
+          <label htmlFor="nombre" className="mb-1.5 block text-sm font-medium">
+            Nombre completo
           </label>
-          <div className="flex gap-2">
+          <input
+            id="nombre"
+            name="nombre"
+            required
+            minLength={2}
+            maxLength={120}
+            defaultValue={candidato?.nombre}
+            className={inputCls}
+          />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="telefono" className="mb-1.5 block text-sm font-medium">
+              Teléfono
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="telefono"
+                name="telefono"
+                type="tel"
+                required
+                minLength={5}
+                maxLength={30}
+                defaultValue={candidato?.telefono}
+                className={inputCls}
+              />
+              {candidato && (
+                <a
+                  href={`tel:${candidato.telefono.replace(/[^\d+]/g, "")}`}
+                  className={`${btnGhost} size-11 shrink-0 p-0`}
+                  aria-label={`Llamar a ${candidato.nombre}`}
+                >
+                  <Phone className="size-4" />
+                </a>
+              )}
+            </div>
+          </div>
+          <div>
+            <label htmlFor="fecha_nacimiento" className="mb-1.5 block text-sm font-medium">
+              Fecha de nacimiento
+            </label>
             <input
-              id="telefono"
-              name="telefono"
-              type="tel"
-              required
-              minLength={5}
-              maxLength={30}
-              defaultValue={candidato?.telefono}
+              id="fecha_nacimiento"
+              name="fecha_nacimiento"
+              type="date"
+              max={new Date().toISOString().slice(0, 10)}
+              defaultValue={candidato?.fecha_nacimiento ?? ""}
               className={inputCls}
             />
-            {candidato && (
-              <a
-                href={`tel:${candidato.telefono.replace(/[^\d+]/g, "")}`}
-                className={`${btnGhost} size-11 shrink-0 p-0`}
-                aria-label={`Llamar a ${candidato.nombre}`}
-              >
-                <Phone className="size-4" />
-              </a>
-            )}
           </div>
         </div>
         <div>
-          <label htmlFor="fecha_nacimiento" className="mb-1.5 block text-sm font-medium">
-            Fecha de nacimiento
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
+            Correo <span className="text-muted-foreground">(opcional)</span>
           </label>
           <input
-            id="fecha_nacimiento"
-            name="fecha_nacimiento"
-            type="date"
-            max={new Date().toISOString().slice(0, 10)}
-            defaultValue={candidato?.fecha_nacimiento ?? ""}
+            id="email"
+            name="email"
+            type="email"
+            maxLength={160}
+            defaultValue={candidato?.email ?? ""}
             className={inputCls}
           />
         </div>
-      </div>
-      <div>
-        <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
-          Correo <span className="text-muted-foreground">(opcional)</span>
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          maxLength={160}
-          defaultValue={candidato?.email ?? ""}
-          className={inputCls}
-        />
-      </div>
 
-      <div>
-        <p className="mb-1.5 text-sm font-medium">Estado</p>
-        <Pills label="Estado" value={estado} options={ESTADOS} onChange={setEstado} render={(e) => ESTADO_LABEL[e]} />
-      </div>
-
-      {estado === "bautizado" && (
         <div>
-          <label htmlFor="fecha_bautismo" className="mb-1.5 block text-sm font-medium">
-            Fecha del bautismo
-          </label>
-          <input
-            id="fecha_bautismo"
-            name="fecha_bautismo"
-            type="date"
-            defaultValue={candidato?.fecha_bautismo ?? new Date().toISOString().slice(0, 10)}
-            className={inputCls}
+          <p className="mb-1.5 text-sm font-medium">Estado</p>
+          <Pills
+            label="Estado"
+            value={estado}
+            options={ESTADOS}
+            onChange={setEstado}
+            render={(e) => ESTADO_LABEL[e]}
           />
         </div>
-      )}
 
-      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-border px-3.5 py-3 text-sm">
-        <input
-          type="checkbox"
-          name="libro_leido"
-          defaultChecked={candidato?.libro_leido ?? false}
-          className="size-4 accent-[var(--color-accent)]"
-        />
-        Ha leído el libro del bautismo
-      </label>
+        {estado === "bautizado" && (
+          <div>
+            <label htmlFor="fecha_bautismo" className="mb-1.5 block text-sm font-medium">
+              Fecha del bautismo
+            </label>
+            <input
+              id="fecha_bautismo"
+              name="fecha_bautismo"
+              type="date"
+              defaultValue={candidato?.fecha_bautismo ?? new Date().toISOString().slice(0, 10)}
+              className={inputCls}
+            />
+          </div>
+        )}
 
-      {candidato?.mensaje && (
-        <div className="rounded-xl bg-muted/60 px-3.5 py-3 text-sm">
-          <p className="mb-1 text-[12px] text-muted-foreground">
-            Mensaje de la inscripción · {fechaCorta(candidato.created_at)}
-          </p>
-          <p className="whitespace-pre-wrap">{candidato.mensaje}</p>
+        <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-border px-3.5 py-3 text-sm">
+          <input
+            type="checkbox"
+            name="libro_leido"
+            defaultChecked={candidato?.libro_leido ?? false}
+            className="size-4 accent-[var(--color-accent)]"
+          />
+          Ha leído el libro del bautismo
+        </label>
+
+        {candidato?.mensaje && (
+          <div className="rounded-xl bg-muted/60 px-3.5 py-3 text-sm">
+            <p className="mb-1 text-[12px] text-muted-foreground">
+              Mensaje de la inscripción · {fechaCorta(candidato.created_at)}
+            </p>
+            <p className="whitespace-pre-wrap">{candidato.mensaje}</p>
+          </div>
+        )}
+
+        {candidato && admin && (
+          <FotoBautismo
+            candidato={candidato}
+            url={fotoUrl}
+            habilitada={estado === "bautizado"}
+            onCambio={onFoto}
+          />
+        )}
+        {candidato && !admin && fotoUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={fotoUrl}
+            alt={`Bautismo de ${candidato.nombre}`}
+            className="size-28 rounded-2xl object-cover"
+          />
+        )}
+
+        {error && <p className="text-sm text-red-300">{error}</p>}
+      </fieldset>
+
+      {admin && (
+        <div className="mt-4 flex items-center gap-2 pt-1">
+          {candidato && (
+            <button type="button" onClick={borrar} className={`${btnGhost} text-red-300`}>
+              <Trash2 className="size-4" /> Borrar
+            </button>
+          )}
+          <button type="submit" disabled={guardando} className={`${btnPrimary} ml-auto px-6 py-2.5`}>
+            {guardando && <Loader2 className="size-4 animate-spin" />}
+            {candidato ? "Guardar cambios" : "Añadir"}
+          </button>
         </div>
       )}
-
-      {candidato && (
-        <FotoBautismo candidato={candidato} url={fotoUrl} habilitada={estado === "bautizado"} onCambio={onFoto} />
-      )}
-
-      {error && <p className="text-sm text-red-300">{error}</p>}
-
-      <div className="flex items-center gap-2 pt-1">
-        {candidato && (
-          <button type="button" onClick={borrar} className={`${btnGhost} text-red-300`}>
-            <Trash2 className="size-4" /> Borrar
-          </button>
-        )}
-        <button type="submit" disabled={guardando} className={`${btnPrimary} ml-auto px-6 py-2.5`}>
-          {guardando && <Loader2 className="size-4 animate-spin" />}
-          {candidato ? "Guardar cambios" : "Añadir"}
-        </button>
-      </div>
     </form>
   )
 }
@@ -383,14 +415,18 @@ function FotoBautismo({
       </p>
       {!habilitada ? (
         <p className="text-sm text-muted-foreground">
-          Marca a la persona como <strong className="text-foreground">Bautizado</strong> y guarda para poder subir
-          su foto.
+          Marca a la persona como <strong className="text-foreground">Bautizado</strong> y guarda para poder
+          subir su foto.
         </p>
       ) : (
         <div className="flex items-center gap-4">
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={preview} alt={`Bautismo de ${candidato.nombre}`} className="size-24 rounded-2xl object-cover" />
+            <img
+              src={preview}
+              alt={`Bautismo de ${candidato.nombre}`}
+              className="size-24 rounded-2xl object-cover"
+            />
           ) : (
             <span className="grid size-24 place-items-center rounded-2xl bg-muted text-muted-foreground">
               <ImageIcon className="size-6" />
@@ -425,7 +461,13 @@ function FotoBautismo({
 }
 
 /** Galería de fotos de los ya bautizados. */
-export function BautizadosTile({ candidatos, fotos }: { candidatos: Candidato[]; fotos: Record<string, string> }) {
+export function BautizadosTile({
+  candidatos,
+  fotos,
+}: {
+  candidatos: Candidato[]
+  fotos: Record<string, string>
+}) {
   const bautizados = candidatos
     .filter((c) => c.estado === "bautizado")
     .sort((a, b) => (b.fecha_bautismo ?? "").localeCompare(a.fecha_bautismo ?? ""))
@@ -451,7 +493,12 @@ export function BautizadosTile({ candidatos, fotos }: { candidatos: Candidato[];
                 <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-muted">
                   {url ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={url} alt={`Bautismo de ${c.nombre}`} className="size-full object-cover" loading="lazy" />
+                    <img
+                      src={url}
+                      alt={`Bautismo de ${c.nombre}`}
+                      className="size-full object-cover"
+                      loading="lazy"
+                    />
                   ) : (
                     <span className="grid size-full place-items-center text-center text-[12px] text-muted-foreground">
                       <span>

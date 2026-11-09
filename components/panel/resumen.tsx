@@ -98,13 +98,7 @@ export function HeroTile({
 }
 
 /** Tarjeta de color: cuenta atrás al próximo bautismo y preparación. */
-export function ProximoTile({
-  candidatos,
-  planchadas,
-}: {
-  candidatos: Candidato[]
-  planchadas: number
-}) {
+export function ProximoTile({ candidatos, planchadas }: { candidatos: Candidato[]; planchadas: number }) {
   const [ahora, setAhora] = React.useState<number | null>(null)
   React.useEffect(() => {
     setAhora(Date.now())
@@ -124,7 +118,11 @@ export function ProximoTile({
     [<Users key="u" className="size-4" />, "Candidatos", String(pendientes.length)],
     [<UserCheck key="c" className="size-4" />, "Contactados", `${contactados} de ${pendientes.length}`],
     [<BookOpen key="l" className="size-4" />, "Leyeron el libro", `${leidos} de ${pendientes.length}`],
-    [<Shirt key="b" className="size-4" />, "Batas planchadas", `${planchadas} / ${pendientes.length} necesarias`],
+    [
+      <Shirt key="b" className="size-4" />,
+      "Batas planchadas",
+      `${planchadas} / ${pendientes.length} necesarias`,
+    ],
   ]
 
   return (
@@ -164,7 +162,10 @@ export function ProximoTile({
       </dl>
 
       <div className="mt-auto pt-6">
-        <div className="rounded-2xl p-3 text-[13px] font-semibold" style={{ background: "rgb(6 18 46 / 0.1)" }}>
+        <div
+          className="rounded-2xl p-3 text-[13px] font-semibold"
+          style={{ background: "rgb(6 18 46 / 0.1)" }}
+        >
           {pendientes.length === 0
             ? "Todavía no hay candidatos para este bautismo."
             : batasOk

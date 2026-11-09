@@ -8,6 +8,24 @@ export const ESTADO_LABEL: Record<Estado, string> = {
   bautizado: "Bautizado",
 }
 
+export type Rol = "voluntario" | "coordinador" | "staff"
+export const ROLES: readonly Rol[] = ["voluntario", "coordinador", "staff"] as const
+export const ROL_LABEL: Record<Rol, string> = {
+  voluntario: "Voluntario",
+  coordinador: "Coordinador",
+  staff: "Staff",
+}
+/** Coordinador y staff tienen acceso total; el voluntario solo consulta y registra batas. */
+export const esAdmin = (rol: Rol) => rol === "coordinador" || rol === "staff"
+
+export interface Miembro {
+  user_id: string
+  nombre: string
+  rol: Rol
+  email: string | null
+  created_at: string
+}
+
 export interface Candidato {
   id: string
   created_at: string

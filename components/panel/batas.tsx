@@ -25,11 +25,13 @@ export function BatasTile({
   total,
   planchadas,
   persona,
+  admin,
   onCambio,
 }: {
   total: number
   planchadas: number
   persona: string
+  admin: boolean
   onCambio: () => void
 }) {
   const [modo, setModo] = React.useState<"planchado" | "usado" | "total" | null>(null)
@@ -40,22 +42,34 @@ export function BatasTile({
       title="Batas"
       className="lg:col-start-3 lg:row-start-1"
       action={
-        <button
-          type="button"
-          onClick={() => setModo("total")}
-          className="inline-flex items-center gap-1 text-[12px] text-muted-foreground transition hover:text-foreground"
-        >
-          <Pencil className="size-3" /> Total: {total}
-        </button>
+        admin ? (
+          <button
+            type="button"
+            onClick={() => setModo("total")}
+            className="inline-flex items-center gap-1 text-[12px] text-muted-foreground transition hover:text-foreground"
+          >
+            <Pencil className="size-3" /> Total: {total}
+          </button>
+        ) : (
+          <span className="text-[12px] text-muted-foreground">Total: {total}</span>
+        )
       }
     >
       <div className="flex flex-1 flex-col items-center justify-center">
         {total === 0 ? (
           <div className="py-4 text-center">
-            <p className="text-sm text-muted-foreground">Indica cuántas batas tiene la iglesia.</p>
-            <button type="button" onClick={() => setModo("total")} className={`${btnPrimary} mt-3`}>
-              Configurar total
-            </button>
+            {admin ? (
+              <>
+                <p className="text-sm text-muted-foreground">Indica cuántas batas tiene la iglesia.</p>
+                <button type="button" onClick={() => setModo("total")} className={`${btnPrimary} mt-3`}>
+                  Configurar total
+                </button>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Un coordinador tiene que indicar cuántas batas tiene la iglesia.
+              </p>
+            )}
           </div>
         ) : (
           <>
@@ -68,9 +82,7 @@ export function BatasTile({
               {planchadas}
               <span className="text-base text-muted-foreground"> / {total}</span>
             </p>
-            <p className="mt-1 text-[12px] text-muted-foreground">
-              planchadas · {sinPlanchar} sin planchar
-            </p>
+            <p className="mt-1 text-[12px] text-muted-foreground">planchadas · {sinPlanchar} sin planchar</p>
           </>
         )}
       </div>
@@ -171,7 +183,10 @@ function FormRegistro({
           >
             <Minus className="size-4" />
           </button>
-          <span className="w-14 text-center font-serif text-4xl font-semibold tabular-nums" aria-live="polite">
+          <span
+            className="w-14 text-center font-serif text-4xl font-semibold tabular-nums"
+            aria-live="polite"
+          >
             {cantidad}
           </span>
           <button
@@ -189,7 +204,14 @@ function FormRegistro({
         <label htmlFor="persona" className="mb-1.5 block text-sm font-medium">
           {tipo === "planchado" ? "¿Quién las planchó?" : "¿Quién lo registra?"}
         </label>
-        <input id="persona" name="persona" defaultValue={persona} required maxLength={80} className={inputCls} />
+        <input
+          id="persona"
+          name="persona"
+          defaultValue={persona}
+          required
+          maxLength={80}
+          className={inputCls}
+        />
       </div>
       <div>
         <label htmlFor="nota" className="mb-1.5 block text-sm font-medium">
@@ -248,16 +270,18 @@ function FormTotal({ total, onHecho }: { total: number; onHecho: () => void }) {
 /** Historial de planchado y uso. */
 export function RegistroBatasTile({
   registro,
+  admin,
   onCambio,
 }: {
   registro: RegistroBata[]
+  admin: boolean
   onCambio: () => void
 }) {
   const mounted = useMounted()
   const [filtro, setFiltro] = React.useState<"Todo" | "Planchado" | "Usado">("Todo")
   const [verTodo, setVerTodo] = React.useState(false)
   const lista = registro.filter(
-    (r) => filtro === "Todo" || r.tipo === (filtro === "Planchado" ? "planchado" : "usado")
+    (r) => filtro === "Todo" || r.tipo === (filtro === "Planchado" ? "planchado" : "usado"),
   )
   const visibles = verTodo ? lista : lista.slice(0, 6)
 
@@ -268,10 +292,7 @@ export function RegistroBatasTile({
   }
 
   return (
-    <Tile
-      title="Registro de batas"
-      className="lg:col-start-3 lg:row-span-2 lg:row-start-2"
-    >
+    <Tile title="Registro de batas" className="lg:col-start-3 lg:row-span-2 lg:row-start-2">
       <div className="mb-3">
         <Pills
           label="Filtrar registro"
@@ -317,14 +338,16 @@ export function RegistroBatasTile({
                 {r.tipo === "planchado" ? "+" : "−"}
                 {r.cantidad}
               </span>
-              <button
-                type="button"
-                onClick={() => borrar(r)}
-                className="grid size-8 place-items-center rounded-full text-muted-foreground opacity-0 transition group-hover:opacity-100 hover:bg-muted hover:text-foreground focus-visible:opacity-100"
-                aria-label="Borrar registro"
-              >
-                <Trash2 className="size-3.5" />
-              </button>
+              {admin && (
+                <button
+                  type="button"
+                  onClick={() => borrar(r)}
+                  className="grid size-8 place-items-center rounded-full text-muted-foreground opacity-0 transition group-hover:opacity-100 hover:bg-muted hover:text-foreground focus-visible:opacity-100"
+                  aria-label="Borrar registro"
+                >
+                  <Trash2 className="size-3.5" />
+                </button>
+              )}
             </li>
           ))}
         </ul>
