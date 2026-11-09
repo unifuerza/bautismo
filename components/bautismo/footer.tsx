@@ -9,14 +9,14 @@ export function Footer() {
         <div>
           <div className="flex items-center gap-2.5 text-white">
             <Droplets className="size-5 text-accent" />
-            <span className="font-serif text-2xl font-semibold">{site.nombre}</span>
+            <span className="font-brand text-xl">{site.nombre}</span>
           </div>
           <p className="mt-4 max-w-xs">
             Una familia que te recibe, te ayuda y camina contigo en la fe.
           </p>
         </div>
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-white">Contacto</h3>
+          <h3 className="font-label text-xl uppercase tracking-wider text-white">Contacto</h3>
           <ul className="mt-4 space-y-3">
             <li className="flex gap-2.5">
               <MapPin className="mt-0.5 size-4 shrink-0 text-accent" /> {direccion}
@@ -36,7 +36,7 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+          <h3 className="font-label text-xl uppercase tracking-wider text-white">
             Horarios de servicio
           </h3>
           <ul className="mt-4 space-y-3">

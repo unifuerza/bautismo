@@ -37,7 +37,7 @@ export function Navbar() {
           <span className="grid size-9 place-items-center rounded-full bg-white/10 ring-1 ring-white/20">
             <Droplets className="size-4.5 text-accent" />
           </span>
-          <span className="font-serif text-lg font-semibold leading-none sm:text-xl">
+          <span className="font-brand text-base leading-none sm:text-lg">
             {site.nombre}
           </span>
         </a>
@@ -47,14 +47,14 @@ export function Navbar() {
             <a
               key={l.href}
               href={l.href}
-              className="text-sm text-white/75 transition hover:text-white"
+              className="font-label text-lg tracking-wide text-white/75 transition hover:text-white"
             >
               {l.label}
             </a>
           ))}
           <a
             href="#inscripcion"
-            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-deep transition hover:bg-accent"
+            className="rounded-full bg-white px-4 py-2 font-label text-lg tracking-wide text-deep transition hover:bg-accent"
           >
             Inscríbete
           </a>
@@ -78,7 +78,7 @@ export function Navbar() {
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className="block py-3 text-base text-white/85"
+              className="block py-3 font-label text-xl tracking-wide text-white/85"
             >
               {l.label}
             </a>
@@ -86,7 +86,7 @@ export function Navbar() {
           <a
             href="#inscripcion"
             onClick={() => setOpen(false)}
-            className="mt-3 block rounded-full bg-white py-3 text-center text-sm font-semibold text-deep"
+            className="mt-3 block rounded-full bg-white py-3 text-center font-label text-lg tracking-wide text-deep"
           >
             Inscríbete
           </a>

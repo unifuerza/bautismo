@@ -32,16 +32,16 @@ export function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-sky-100 backdrop-blur-md"
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 font-label text-base uppercase tracking-[0.15em] text-sky-100 backdrop-blur-md"
         >
-          Bautismo en agua · {site.nombre}
+          Bautismo en agua<span className="hidden sm:inline"> · {site.nombre}</span>
         </motion.p>
 
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.1, ease }}
-          className="max-w-4xl font-serif text-5xl font-semibold leading-[1.02] tracking-tight sm:text-7xl lg:text-8xl"
+          className="max-w-4xl font-display text-6xl uppercase leading-[1.08] tracking-wide sm:text-7xl lg:text-8xl"
         >
           Una vida nueva comienza en el agua
         </motion.h1>
@@ -65,14 +65,14 @@ export function Hero() {
         >
           <a
             href="#inscripcion"
-            className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-deep transition hover:bg-accent"
+            className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-label text-lg tracking-wide text-deep transition hover:bg-accent"
           >
             Quiero bautizarme
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
           </a>
           <a
             href="#significado"
-            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold backdrop-blur-md transition hover:bg-white/20"
+            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 font-label text-lg tracking-wide backdrop-blur-md transition hover:bg-white/20"
           >
             ¿Qué significa el bautismo?
           </a>

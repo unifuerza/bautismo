@@ -14,7 +14,7 @@ import { site } from "@/lib/site"
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+    <p className="mb-4 font-label text-lg uppercase tracking-[0.15em] text-primary">
       {children}
     </p>
   )
@@ -84,7 +84,7 @@ export function Significado() {
           </div>
           <div className="absolute -bottom-6 left-4 right-4 rounded-2xl border bg-card p-5 shadow-xl sm:left-auto sm:right-[-1.5rem] sm:w-72">
             <BookOpen className="mb-2 size-5 text-primary" />
-            <p className="font-serif text-lg italic leading-snug">
+            <p className="text-lg italic leading-snug">
               “Arrepentíos, y bautícese cada uno de vosotros en el nombre de Jesucristo.”
             </p>
             <p className="mt-2 text-sm text-muted-foreground">Hechos 2:38</p>
@@ -135,7 +135,7 @@ export function Pasos() {
               key={p.title}
               className="relative rounded-2xl border bg-card p-6 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
             >
-              <span className="font-serif text-5xl font-semibold text-primary/25">
+              <span className="font-label text-6xl leading-none text-primary/30">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="mt-3 text-lg font-semibold">{p.title}</h3>
@@ -182,10 +182,10 @@ export function ProximoBautismo() {
             </div>
 
             <div className="p-8 sm:p-12">
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+              <p className="mb-4 font-label text-lg uppercase tracking-[0.15em] text-accent">
                 Próximo bautismo
               </p>
-              <h2 className="font-serif text-4xl font-semibold leading-tight sm:text-5xl">
+              <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
                 Te esperamos en las aguas
               </h2>
 
@@ -194,7 +194,7 @@ export function ProximoBautismo() {
                   <div key={label} className="flex gap-3">
                     <Icon className="mt-0.5 size-5 shrink-0 text-accent" />
                     <div>
-                      <dt className="text-xs uppercase tracking-wider text-white/50">{label}</dt>
+                      <dt className="font-label text-base uppercase tracking-wider text-white/50">{label}</dt>
                       <dd className="mt-1 text-white/90">{value}</dd>
                     </div>
                   </div>
@@ -217,7 +217,7 @@ export function ProximoBautismo() {
 
               <a
                 href="#inscripcion"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-deep transition hover:bg-accent"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-label text-lg tracking-wide text-deep transition hover:bg-accent"
               >
                 <HeartHandshake className="size-4" /> Reservar mi lugar
               </a>

@@ -33,3 +33,17 @@ Variables de entorno (ver `.env.example`), necesarias en local (`.env.local`) y 
 Seguridad (RLS): los visitantes solo pueden **insertar** inscripciones; no pueden leerlas, editarlas ni borrarlas.
 Para ver las inscripciones, entra al panel de Supabase → Table Editor → `inscripciones_bautismo`.
 La columna `estado` (`nuevo`, `contactado`, `en_clase`, `bautizado`) sirve para dar seguimiento.
+
+## Tipografías
+
+Todas con licencia SIL Open Font License 1.1 (libres para uso web y comercial):
+
+| Uso | Fuente | Origen |
+|---|---|---|
+| Etiquetas, botones, menú, números | Bebas Kai | `app/fonts/bebas-kai.otf` |
+| Título de la portada | Anton | `@fontsource/anton` |
+| Títulos de sección | Inter Tight | `@fontsource/inter-tight` |
+| Texto general | Belleza | `@fontsource/belleza` |
+| Nombre de la iglesia | Righteous | `@fontsource/righteous` |
+
+Los tokens están en `app/globals.css` (`--font-sans`, `--font-serif`, `--font-display`, `--font-label`, `--font-brand`).

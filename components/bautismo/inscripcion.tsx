@@ -52,7 +52,7 @@ export function Inscripcion() {
     <section id="inscripcion" className="scroll-mt-16 bg-background py-24 sm:py-32">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:items-start">
         <div>
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <p className="mb-4 font-label text-lg uppercase tracking-[0.15em] text-primary">
             Inscripción
           </p>
           <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
@@ -79,7 +79,7 @@ export function Inscripcion() {
               <span className="mx-auto grid size-14 place-items-center rounded-full bg-secondary text-primary">
                 <Check className="size-7" />
               </span>
-              <h3 className="mt-5 font-serif text-3xl font-semibold">¡Gracias por tu decisión!</h3>
+              <h3 className="mt-5 font-serif text-3xl font-semibold tracking-tight">¡Gracias por tu decisión!</h3>
               <p className="mx-auto mt-3 max-w-sm text-muted-foreground">
                 Recibimos tu inscripción. Un miembro del equipo pastoral se pondrá en contacto
                 contigo muy pronto.
@@ -174,7 +174,7 @@ export function Inscripcion() {
               <button
                 type="submit"
                 disabled={enviando}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-70"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-label text-xl tracking-wide text-primary-foreground transition hover:bg-primary/90 disabled:opacity-70"
               >
                 {enviando ? (
                   <>
