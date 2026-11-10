@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { AlertCircle, Check, Loader2, Send } from "lucide-react"
+import { AlertCircle, Check, Clock, Loader2, MapPin, Phone, Send } from "lucide-react"
 import { site } from "@/lib/site"
 import { supabase } from "@/lib/supabase"
 
@@ -116,22 +116,45 @@ export function Inscripcion() {
     <section id="inscripcion" className="scroll-mt-16 bg-background py-24 sm:py-32">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:items-start">
         <div>
-          <p className="mb-4 font-label text-lg uppercase tracking-[0.15em] text-primary">Inscripción</p>
-          <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+          <h2 className="text-balance font-display text-4xl uppercase leading-[1.05] tracking-wide text-foreground sm:text-5xl lg:text-6xl">
             ¿Listo para dar el paso?
           </h2>
-          <p className="mt-5 max-w-lg text-lg text-muted-foreground">
+          <p className="mt-5 max-w-lg text-xl leading-relaxed text-muted-foreground">
             Déjanos tus datos y alguien de nuestro grupo de bautismo se comunicará contigo para acompañarte en
             este paso.
           </p>
-          <div className="mt-10 aspect-[16/10] overflow-hidden rounded-3xl bg-gradient-to-br from-sky-200 to-primary/30">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80"
-              alt="Interior de una iglesia iluminado por la luz"
-              className="size-full object-cover"
-              loading="lazy"
-            />
+
+          {/* Alternativa al formulario: hablar directamente con la iglesia */}
+          <div className="mt-12 border-t border-border pt-8">
+            <h3 className="text-xl font-bold text-foreground">¿Prefieres hablarlo en persona?</h3>
+            <ul className="mt-4 space-y-3 text-lg text-muted-foreground">
+              <li className="flex items-start gap-3">
+                <Phone className="mt-1 size-5 shrink-0 text-primary" aria-hidden />
+                <a
+                  href={`tel:${site.contacto.telefono.replace(/[^\d+]/g, "")}`}
+                  className="text-foreground underline decoration-primary/30 underline-offset-4 hover:decoration-primary"
+                >
+                  {site.contacto.telefono}
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="mt-1 size-5 shrink-0 text-primary" aria-hidden />
+                <a
+                  href={site.contacto.mapa}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-foreground underline decoration-primary/30 underline-offset-4 hover:decoration-primary"
+                >
+                  {site.contacto.direccion}
+                </a>
+              </li>
+              {site.contacto.horarios.map((h) => (
+                <li key={h} className="flex items-start gap-3">
+                  <Clock className="mt-1 size-5 shrink-0 text-primary" aria-hidden />
+                  {h}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 

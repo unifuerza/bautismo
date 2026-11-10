@@ -10,7 +10,7 @@ export function Footer() {
         <div>
           <div className="flex items-center gap-2.5 text-white">
             <Droplets className="size-5 text-accent" />
-            <span className="font-brand text-xl">{site.nombre}</span>
+            <span className="font-brand text-2xl tracking-[0.06em]">{site.nombre}</span>
           </div>
           <p className="mt-4 max-w-xs">
             Una familia que te recibe, te ayuda y camina contigo en la fe.

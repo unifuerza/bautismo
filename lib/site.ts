@@ -10,7 +10,7 @@ export const site = {
   nombreLegal: "Centro de Ayuda Cristiano",
   proximoBautismo: {
     fecha: "Domingo, 20 de diciembre de 2026",
-    hora: "12:00 h",
+    hora: "12:00\u00a0h",
     // Misma fecha y hora en formato ISO (la usa la cuenta atrás del panel interno)
     fechaISO: "2026-12-20T12:00:00",
     lugar: direccion,

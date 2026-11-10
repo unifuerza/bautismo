@@ -1,41 +1,26 @@
-import {
-  BookOpen,
-  CalendarDays,
-  Clock,
-  HandHeart,
-  HeartHandshake,
-  MapPin,
-  Shirt,
-  Sparkles,
-  Users,
-  Waves,
-} from "lucide-react"
+import { ArrowRight, Check, MapPin, Plus } from "lucide-react"
 import { site } from "@/lib/site"
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mb-4 font-label text-lg uppercase tracking-[0.15em] text-primary">
-      {children}
-    </p>
-  )
-}
+// Titulares de sección: la misma voz que la portada (Anton, mayúsculas)
+const h2 =
+  "text-balance font-display text-4xl uppercase leading-[1.05] tracking-wide text-foreground sm:text-5xl lg:text-6xl"
+
+// Referencias bíblicas y etiquetas: Bebas Kai
+const referencia = "font-label text-base tracking-[0.12em] text-primary"
 
 /* ---------------- Significado ---------------- */
 const significados = [
   {
-    icon: HandHeart,
     title: "Un paso de obediencia",
     text: "Jesús mandó a sus discípulos bautizar a todos los que creen. Bautizarnos es responder con obediencia a su llamado.",
     ref: "Mateo 28:19",
   },
   {
-    icon: Waves,
     title: "Morir y resucitar con Cristo",
     text: "Al entrar al agua dejamos atrás la vida pasada; al salir, declaramos que caminamos en una vida nueva por su resurrección.",
     ref: "Romanos 6:4",
   },
   {
-    icon: Users,
     title: "Un testimonio público",
     text: "Es una declaración delante de tu familia y de la iglesia: “Pertenezco a Jesús”. Una fiesta para toda la comunidad de fe.",
     ref: "Hechos 2:41",
@@ -45,51 +30,40 @@ const significados = [
 export function Significado() {
   return (
     <section id="significado" className="scroll-mt-16 bg-background py-24 sm:py-32">
-      <div className="mx-auto grid max-w-6xl gap-14 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:items-center">
+      <div className="mx-auto grid max-w-6xl gap-14 px-5 sm:px-8 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
         <div>
-          <Eyebrow>¿Qué es el bautismo?</Eyebrow>
-          <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            Una señal exterior de un cambio interior
-          </h2>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            El bautismo en agua no nos salva: es la respuesta de quien ya ha recibido a Jesucristo
-            como Señor y Salvador. Es una celebración de lo que Dios ya hizo en tu corazón.
+          <h2 className={h2}>Una señal exterior de un cambio interior</h2>
+          <p className="mt-6 max-w-xl text-xl leading-relaxed text-muted-foreground">
+            El bautismo en agua no nos salva: es la respuesta de quien ya ha recibido a Jesucristo como Señor y
+            Salvador. Es una celebración de lo que Dios ya hizo en tu corazón.
           </p>
 
-          <div className="mt-10 space-y-6">
-            {significados.map(({ icon: Icon, title, text, ref }) => (
-              <div key={title} className="flex gap-4">
-                <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-secondary text-primary">
-                  <Icon className="size-5" />
-                </span>
-                <div>
-                  <h3 className="font-semibold">{title}</h3>
-                  <p className="mt-1 text-muted-foreground">{text}</p>
-                  <p className="mt-1 text-sm font-medium text-primary">{ref}</p>
-                </div>
-              </div>
+          <ul className="mt-12 divide-y divide-border border-y border-border">
+            {significados.map(({ title, text, ref }) => (
+              <li key={title} className="py-6">
+                <h3 className="text-xl font-bold text-foreground">{title}</h3>
+                <p className="mt-1.5 max-w-xl text-lg leading-relaxed text-muted-foreground">{text}</p>
+                <p className={`mt-2 ${referencia}`}>{ref}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
-        <div className="relative">
-          <div className="aspect-[4/5] overflow-hidden rounded-3xl bg-gradient-to-br from-sky-200 to-primary/40 shadow-2xl shadow-primary/10">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1000&q=80"
-              alt="Biblia abierta sobre una mesa"
-              className="size-full object-cover"
-              loading="lazy"
-            />
-          </div>
-          <div className="absolute -bottom-6 left-4 right-4 rounded-2xl border bg-card p-5 shadow-xl sm:left-auto sm:right-[-1.5rem] sm:w-72">
-            <BookOpen className="mb-2 size-5 text-primary" />
-            <p className="text-lg italic leading-snug">
-              “Arrepentíos, y bautícese cada uno de vosotros en el nombre de Jesucristo.”
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">Hechos 2:38</p>
-          </div>
-        </div>
+        {/* Versículo protagonista: sustituye a la foto de stock */}
+        <figure className="relative overflow-hidden rounded-3xl bg-deep p-8 text-white sm:p-12 lg:self-center lg:p-14">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(120% 70% at 85% 0%, rgb(30 79 200 / 0.55), transparent 60%), radial-gradient(90% 60% at 0% 100%, rgb(150 215 255 / 0.18), transparent 70%)",
+            }}
+          />
+          <blockquote className="relative text-3xl italic leading-snug sm:text-4xl lg:text-5xl lg:leading-[1.15]">
+            “Arrepentíos, y bautícese cada uno de vosotros en el nombre de Jesucristo.”
+          </blockquote>
+          <figcaption className="relative mt-6 font-label text-lg tracking-[0.12em] text-accent">Hechos 2:38</figcaption>
+        </figure>
       </div>
     </section>
   )
@@ -116,26 +90,24 @@ export function Pasos() {
     <section id="pasos" className="scroll-mt-16 bg-secondary/60 py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="max-w-2xl">
-          <Eyebrow>Cómo prepararte</Eyebrow>
-          <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            Tres pasos hacia las aguas
-          </h2>
-          <p className="mt-5 text-lg text-muted-foreground">
+          <h2 className={h2}>Tres pasos hacia las aguas</h2>
+          <p className="mt-5 text-xl leading-relaxed text-muted-foreground">
             No tienes que tenerlo todo resuelto. Te acompañamos en cada etapa del camino.
           </p>
         </div>
 
-        <ol className="mt-14 grid gap-5 md:grid-cols-3">
+        {/* Recorrido: el número indica el orden, la línea une los pasos */}
+        <ol className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
           {pasos.map((p, i) => (
-            <li
-              key={p.title}
-              className="relative rounded-2xl border bg-card p-6 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
-            >
-              <span className="font-label text-6xl leading-none text-primary/30">
-                {String(i + 1).padStart(2, "0")}
+            <li key={p.title} className="border-t-2 border-primary/30 pt-6">
+              <span className="font-label text-7xl leading-none text-primary" aria-hidden>
+                {i + 1}
               </span>
-              <h3 className="mt-3 text-lg font-semibold">{p.title}</h3>
-              <p className="mt-2 text-muted-foreground">{p.text}</p>
+              <h3 className="mt-4 text-xl font-bold text-foreground">
+                <span className="sr-only">Paso {i + 1}: </span>
+                {p.title}
+              </h3>
+              <p className="mt-2 text-lg leading-relaxed text-muted-foreground">{p.text}</p>
             </li>
           ))}
         </ol>
@@ -152,82 +124,71 @@ const traer = [
   "¡A tu familia y amigos para celebrar contigo!",
 ]
 
+function partesFecha(iso: string) {
+  const d = new Date(iso)
+  const f = (o: Intl.DateTimeFormatOptions) => d.toLocaleDateString("es-ES", o)
+  return { semana: f({ weekday: "long" }), dia: f({ day: "numeric" }), mes: f({ month: "long" }), anio: f({ year: "numeric" }) }
+}
+
 export function ProximoBautismo() {
-  const { fecha, hora, lugar } = site.proximoBautismo
-  const detalles: { icon: typeof MapPin; label: string; value: string; href?: string }[] = [
-    { icon: CalendarDays, label: "Fecha", value: fecha },
-    { icon: Clock, label: "Hora", value: hora },
-    { icon: MapPin, label: "Lugar", value: lugar, href: site.contacto.mapa },
-  ]
+  const { hora, lugar, fechaISO } = site.proximoBautismo
+  const { semana, dia, mes, anio } = partesFecha(fechaISO)
 
   return (
     <section id="proximo" className="scroll-mt-16 bg-background py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="overflow-hidden rounded-3xl bg-deep text-white shadow-2xl">
-          <div className="grid lg:grid-cols-2">
-            <div className="relative min-h-72 lg:min-h-full">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80"
-                alt="Agua cristalina iluminada por el sol"
-                className="absolute inset-0 size-full object-cover opacity-80"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-deep via-deep/30 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-deep/20 lg:to-deep" />
+        <div className="relative overflow-hidden rounded-3xl bg-deep text-white">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(70% 90% at 0% 0%, rgb(30 79 200 / 0.6), transparent 65%), radial-gradient(60% 70% at 100% 100%, rgb(150 215 255 / 0.14), transparent 70%)",
+            }}
+          />
+          <div className="relative grid lg:grid-cols-[0.9fr_1.1fr]">
+            {/* La fecha es la protagonista */}
+            <div className="flex flex-col justify-center border-b border-white/10 p-8 sm:p-12 lg:border-b-0 lg:border-r">
+              <p className="font-label text-2xl capitalize tracking-[0.1em] text-accent">{semana}</p>
+              <p className="font-display text-[8rem] leading-[0.9] sm:text-[10rem]">{dia}</p>
+              <p className="font-label text-4xl capitalize tracking-[0.06em]">
+                {mes} {anio}
+              </p>
+              <p className="mt-4 font-label text-2xl tracking-[0.1em] text-white/80">{hora}</p>
             </div>
 
             <div className="p-8 sm:p-12">
-              <p className="mb-4 font-label text-lg uppercase tracking-[0.15em] text-accent">
+              <h2 className="text-balance font-display text-4xl uppercase leading-[1.05] tracking-wide sm:text-5xl">
                 Próximo bautismo
-              </p>
-              <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-                Te esperamos en las aguas
               </h2>
+              <p className="mt-4 flex items-start gap-2 text-lg text-white/90">
+                <MapPin className="mt-1 size-5 shrink-0 text-accent" aria-hidden />
+                <a
+                  href={site.contacto.mapa}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                >
+                  {lugar}
+                </a>
+              </p>
 
-              <dl className="mt-8 grid gap-5 sm:grid-cols-2">
-                {detalles.map(({ icon: Icon, label, value, href }) => (
-                  <div key={label} className="flex gap-3 sm:last:col-span-2">
-                    <Icon className="mt-0.5 size-5 shrink-0 text-accent" />
-                    <div>
-                      <dt className="font-label text-base uppercase tracking-wider text-white/50">{label}</dt>
-                      <dd className="mt-1 text-white/90">
-                        {href ? (
-                          <a
-                            href={href}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="underline decoration-white/30 underline-offset-4 hover:decoration-white"
-                          >
-                            {value}
-                          </a>
-                        ) : (
-                          value
-                        )}
-                      </dd>
-                    </div>
-                  </div>
+              <h3 className="mt-10 text-xl font-bold">¿Qué debo traer?</h3>
+              <ul className="mt-4 space-y-3 text-lg text-white/85">
+                {traer.map((t) => (
+                  <li key={t} className="flex gap-3">
+                    <Check className="mt-1 size-5 shrink-0 text-accent" aria-hidden />
+                    {t}
+                  </li>
                 ))}
-              </dl>
-
-              <div className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h3 className="flex items-center gap-2 font-semibold">
-                  <Shirt className="size-4 text-accent" /> ¿Qué debo traer?
-                </h3>
-                <ul className="mt-4 space-y-2.5 text-white/75">
-                  {traer.map((t) => (
-                    <li key={t} className="flex gap-2.5">
-                      <Sparkles className="mt-1 size-3.5 shrink-0 text-accent" />
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </ul>
 
               <a
                 href="#inscripcion"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-label text-lg tracking-wide text-deep transition hover:bg-accent"
+                className="group mt-10 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-label text-xl tracking-wide text-deep transition hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-deep"
               >
-                <HeartHandshake className="size-4" /> Reservar mi lugar
+                Quiero bautizarme
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </a>
             </div>
           </div>
@@ -258,29 +219,38 @@ const preguntas = [
 ]
 
 export function Preguntas() {
+  const { email, telefono } = site.contacto
   return (
     <section id="preguntas" className="scroll-mt-16 bg-secondary/60 py-24 sm:py-32">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <Eyebrow>Preguntas frecuentes</Eyebrow>
-          <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            Resolvemos tus dudas
-          </h2>
-          <p className="mt-5 text-lg text-muted-foreground">
-            ¿No encuentras tu pregunta? Escríbenos y con gusto te respondemos.
+          <h2 className={h2}>Resolvemos tus dudas</h2>
+          <p className="mt-5 text-xl leading-relaxed text-muted-foreground">
+            ¿No encuentras tu pregunta? Escríbenos a{" "}
+            <a href={`mailto:${email}`} className="text-primary underline underline-offset-4">
+              {email}
+            </a>{" "}
+            o llámanos al{" "}
+            <a
+              href={`tel:${telefono.replace(/[^\d+]/g, "")}`}
+              className="whitespace-nowrap text-primary underline underline-offset-4"
+            >
+              {telefono}
+            </a>
+            .
           </p>
         </div>
 
-        <div className="divide-y rounded-2xl border bg-card">
+        <div className="divide-y divide-border border-y border-border">
           {preguntas.map(({ q, a }) => (
-            <details key={q} className="group p-6 [&_summary::-webkit-details-marker]:hidden">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
+            <details key={q} className="group py-6 [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-lg text-xl font-bold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4">
                 {q}
-                <span className="grid size-7 shrink-0 place-items-center rounded-full bg-secondary text-primary transition group-open:rotate-45">
-                  +
+                <span className="grid size-8 shrink-0 place-items-center rounded-full border border-primary/30 text-primary transition group-open:rotate-45">
+                  <Plus className="size-4" aria-hidden />
                 </span>
               </summary>
-              <p className="mt-3 leading-relaxed text-muted-foreground">{a}</p>
+              <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted-foreground">{a}</p>
             </details>
           ))}
         </div>

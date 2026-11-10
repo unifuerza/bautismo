@@ -1,7 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { ArrowRight, ChevronDown } from "lucide-react"
+import { motion, MotionConfig } from "framer-motion"
+import { ArrowRight, CalendarDays, ChevronDown } from "lucide-react"
 import { GlassFold } from "@/components/ui/glass-fold"
 import { site } from "@/lib/site"
 
@@ -17,6 +17,13 @@ const waterSettings = {
 
 const ease = [0.16, 1, 0.3, 1] as const
 
+// "domingo, 20 de diciembre"
+const fechaCorta = new Date(site.proximoBautismo.fechaISO).toLocaleDateString("es-ES", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+})
+
 export function Hero() {
   return (
     <section
@@ -29,64 +36,71 @@ export function Hero() {
       {/* velo de lectura: oscurece los pliegues brillantes detrás del título y el versículo */}
       <div className="pointer-events-none absolute inset-0 bg-deep/55 sm:bg-transparent sm:bg-gradient-to-r sm:from-deep/80 sm:via-deep/60 sm:to-deep/15" />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-24 pt-32 sm:px-8">
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 font-label text-base uppercase tracking-[0.15em] text-sky-100 backdrop-blur-md"
-        >
-          Bautismo en agua<span className="hidden sm:inline"> · {site.nombre}</span>
-        </motion.p>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.1, ease }}
-          className="max-w-4xl font-display text-6xl uppercase leading-[1.08] tracking-wide sm:text-7xl lg:text-8xl"
-        >
-          Una vida nueva comienza en el agua
-        </motion.h1>
-
-        <motion.blockquote
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease }}
-          className="mt-8 max-w-xl border-l-2 border-accent/70 pl-5 text-base leading-relaxed text-white/90 sm:text-lg"
-        >
-          “Porque somos sepultados juntamente con él para muerte por el bautismo, a fin de que
-          como Cristo resucitó de los muertos… así también nosotros andemos en vida nueva.”
-          <cite className="mt-2 block text-sm not-italic text-accent">Romanos 6:4</cite>
-        </motion.blockquote>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease }}
-          className="mt-10 flex flex-wrap gap-3"
-        >
-          <a
-            href="#inscripcion"
-            className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-label text-lg tracking-wide text-deep transition hover:bg-accent"
+      <MotionConfig reducedMotion="user">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-24 pt-32 sm:px-8">
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease }}
+            className="max-w-4xl text-balance font-display text-6xl uppercase leading-[1.04] tracking-wide sm:text-7xl lg:text-8xl"
           >
-            Quiero bautizarme
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-          </a>
-          <a
-            href="#significado"
-            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 font-label text-lg tracking-wide backdrop-blur-md transition hover:bg-white/20"
+            Una vida nueva comienza en el agua
+          </motion.h1>
+
+          <motion.blockquote
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.15, ease }}
+            className="mt-8 max-w-xl text-lg italic leading-relaxed text-white/90 sm:text-xl"
           >
-            ¿Qué significa el bautismo?
-          </a>
-        </motion.div>
-      </div>
+            “Porque somos sepultados juntamente con él para muerte por el bautismo, a fin de que como Cristo
+            resucitó de los muertos… así también nosotros andemos en vida nueva.”
+            <cite className="mt-2 block font-label text-base not-italic tracking-[0.12em] text-accent">
+              Romanos 6:4
+            </cite>
+          </motion.blockquote>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3, ease }}
+            className="mt-10"
+          >
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="#inscripcion"
+                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-label text-xl tracking-wide text-deep transition hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-deep"
+              >
+                Quiero bautizarme
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+              <a
+                href="#significado"
+                className="inline-flex items-center gap-2 rounded-full border border-white/40 px-6 py-3 font-label text-xl tracking-wide transition hover:border-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-deep"
+              >
+                ¿Qué significa el bautismo?
+              </a>
+            </div>
+            <a
+              href="#proximo"
+              className="mt-6 inline-flex items-center gap-2 text-base text-white/85 underline decoration-white/30 underline-offset-4 transition hover:decoration-white"
+            >
+              <CalendarDays className="size-4 text-accent" aria-hidden />
+              <span>
+                Próximo bautismo: {fechaCorta}{" "}
+                <span className="whitespace-nowrap">· {site.proximoBautismo.hora}</span>
+              </span>
+            </a>
+          </motion.div>
+        </div>
+      </MotionConfig>
 
       <a
         href="#significado"
         aria-label="Bajar a la siguiente sección"
         className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-white/60 transition hover:text-white"
       >
-        <ChevronDown className="size-7 animate-bounce" />
+        <ChevronDown className="size-7 motion-safe:animate-bounce" />
       </a>
     </section>
   )

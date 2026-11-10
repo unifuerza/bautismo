@@ -61,11 +61,12 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: "Belleza", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  /* Tres familias: Anton (titulares), Bebas Kai (etiquetas, botones, marca), Alegreya Sans (lectura) */
+  --font-sans: "Alegreya Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Alegreya Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
   --font-label: var(--font-bebas-kai), Impact, "Arial Narrow", sans-serif;
-  --font-brand: "Righteous", ui-sans-serif, system-ui, sans-serif;
+  --font-brand: var(--font-bebas-kai), Impact, "Arial Narrow", sans-serif;
 }
 
 @layer base {

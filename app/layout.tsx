@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import "@fontsource/anton/latin-400.css"
-import "@fontsource/belleza/latin-400.css"
-import "@fontsource/inter-tight/latin-600.css"
-import "@fontsource/righteous/latin-400.css"
+import "@fontsource/alegreya-sans/latin-400.css"
+import "@fontsource/alegreya-sans/latin-400-italic.css"
+import "@fontsource/alegreya-sans/latin-500.css"
+import "@fontsource/alegreya-sans/latin-700.css"
 import "./globals.css"
 import { bebasKai } from "./fonts"
 

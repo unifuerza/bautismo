@@ -37,7 +37,7 @@ export function Navbar() {
           <span className="grid size-9 place-items-center rounded-full bg-white/10 ring-1 ring-white/20">
             <Droplets className="size-4.5 text-accent" />
           </span>
-          <span className="font-brand text-base leading-none sm:text-lg">
+          <span className="font-brand text-xl leading-none tracking-[0.06em] sm:text-2xl">
             {site.nombre}
           </span>
         </a>
@@ -56,7 +56,7 @@ export function Navbar() {
             href="#inscripcion"
             className="rounded-full bg-white px-4 py-2 font-label text-lg tracking-wide text-deep transition hover:bg-accent"
           >
-            Inscríbete
+            Quiero bautizarme
           </a>
         </div>
 
@@ -88,7 +88,7 @@ export function Navbar() {
             onClick={() => setOpen(false)}
             className="mt-3 block rounded-full bg-white py-3 text-center font-label text-lg tracking-wide text-deep"
           >
-            Inscríbete
+            Quiero bautizarme
           </a>
         </div>
       )}
