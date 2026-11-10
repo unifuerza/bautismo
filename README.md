@@ -94,3 +94,25 @@ reenviar el correo) y no puede entrar.
    `supabase/plantillas-correo/recuperar-contrasena.html` en *Reset password*.
 4. **Authentication → Sign In / Providers**: desactivar *Allow new users to sign up* (las invitaciones
    siguen funcionando).
+
+## Skill de diseño: Impeccable
+
+En `.claude/skills/impeccable` (más 4 agentes en `.claude/agents/`) está instalada la skill
+[Impeccable](https://github.com/pbakaus/impeccable) v4.8.2 (licencia Apache 2.0), copiada del repositorio
+oficial. En Claude Code se usa con `/impeccable <comando> <objetivo>`, por ejemplo:
+
+```
+/impeccable init
+/impeccable critique el formulario de inscripción
+/impeccable polish el panel interno
+/impeccable audit /panel
+```
+
+Notas:
+- La primera vez descarga su motor (binario) desde las *releases* de GitHub de pbakaus/impeccable y comprueba
+  su SHA-256 con `scripts/engine-checksums.txt`.
+- **No** se ha instalado el *hook* automático (que revisa cada archivo de UI editado); se puede añadir con
+  `npx impeccable install` si se quiere.
+- El modo `live` puede lanzar `claude`/`codex` sin pedir permisos para aplicar cambios; usarlo solo en local y
+  con `IMPECCABLE_LIVE_COPY_AGENT=chat`.
+- Para actualizar: `npx impeccable update`.
