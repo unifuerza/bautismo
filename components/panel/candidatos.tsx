@@ -104,7 +104,7 @@ export function CandidatosTile({
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Buscar nombre o teléfono"
-            className={`${inputCls} py-2 pl-9 text-sm`}
+            className={`${inputCls} py-2 pl-9`}
           />
         </label>
       </div>

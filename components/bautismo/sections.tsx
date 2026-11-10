@@ -161,13 +161,13 @@ export function ProximoBautismo() {
               <h2 className="text-balance font-display text-4xl uppercase leading-[1.05] tracking-wide sm:text-5xl">
                 Próximo bautismo
               </h2>
-              <p className="mt-4 flex items-start gap-2 text-lg text-white/90">
-                <MapPin className="mt-1 size-5 shrink-0 text-accent" aria-hidden />
+              <p className="mt-2 flex items-center gap-2 text-lg text-white/90">
+                <MapPin className="size-5 shrink-0 text-accent" aria-hidden />
                 <a
                   href={site.contacto.mapa}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                  className="inline-flex min-h-11 items-center underline decoration-white/30 underline-offset-4 hover:decoration-white"
                 >
                   {lugar}
                 </a>
@@ -243,14 +243,14 @@ export function Preguntas() {
 
         <div className="divide-y divide-border border-y border-border">
           {preguntas.map(({ q, a }) => (
-            <details key={q} className="group py-6 [&_summary::-webkit-details-marker]:hidden">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-lg text-xl font-bold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4">
+            <details key={q} className="group [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 rounded-lg py-5 text-xl font-bold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4">
                 {q}
                 <span className="grid size-8 shrink-0 place-items-center rounded-full border border-primary/30 text-primary transition group-open:rotate-45">
                   <Plus className="size-4" aria-hidden />
                 </span>
               </summary>
-              <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted-foreground">{a}</p>
+              <p className="-mt-1 max-w-2xl pb-6 text-lg leading-relaxed text-muted-foreground">{a}</p>
             </details>
           ))}
         </div>

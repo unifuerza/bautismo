@@ -16,6 +16,14 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
+  // Cerrar el menú móvil con Escape
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false)
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [open])
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
     onScroll()
@@ -29,11 +37,12 @@ export function Navbar() {
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled || open
           ? "border-b border-white/10 bg-deep/80 backdrop-blur-xl"
-          : "bg-transparent"
+          : "bg-transparent",
+        open && "bg-deep"
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 text-white sm:px-8">
-        <a href="#inicio" className="flex items-center gap-2.5">
+        <a href="#inicio" className="flex min-h-11 items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-full bg-white/10 ring-1 ring-white/20">
             <Droplets className="size-4.5 text-accent" />
           </span>
@@ -63,7 +72,8 @@ export function Navbar() {
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
-          className="grid size-10 place-items-center rounded-full md:hidden"
+          className="-mr-2 grid size-11 place-items-center rounded-full md:hidden"
+          aria-controls="menu-movil"
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
         >
@@ -72,7 +82,7 @@ export function Navbar() {
       </nav>
 
       {open && (
-        <div className="border-t border-white/10 px-5 pb-6 pt-2 md:hidden">
+        <div id="menu-movil" className="border-t border-white/10 px-5 pb-6 pt-2 md:hidden">
           {links.map((l) => (
             <a
               key={l.href}

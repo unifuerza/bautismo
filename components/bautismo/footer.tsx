@@ -18,22 +18,22 @@ export function Footer() {
         </div>
         <div>
           <h3 className="font-label text-xl uppercase tracking-wider text-white">Contacto</h3>
-          <ul className="mt-4 space-y-3">
-            <li className="flex gap-2.5">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
-              <a href={mapa} target="_blank" rel="noreferrer" className="hover:text-white">
+          <ul className="mt-3 space-y-1">
+            <li className="flex min-h-11 items-center gap-2.5">
+              <MapPin className="size-4 shrink-0 text-accent" />
+              <a href={mapa} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center hover:text-white">
                 {direccion}
               </a>
             </li>
-            <li className="flex gap-2.5">
-              <Phone className="mt-0.5 size-4 shrink-0 text-accent" />
-              <a href={`tel:${telefono.replace(/[^\d+]/g, "")}`} className="hover:text-white">
+            <li className="flex min-h-11 items-center gap-2.5">
+              <Phone className="size-4 shrink-0 text-accent" />
+              <a href={`tel:${telefono.replace(/[^\d+]/g, "")}`} className="inline-flex min-h-11 items-center hover:text-white">
                 {telefono}
               </a>
             </li>
-            <li className="flex gap-2.5">
-              <Mail className="mt-0.5 size-4 shrink-0 text-accent" />
-              <a href={`mailto:${email}`} className="break-all hover:text-white">
+            <li className="flex min-h-11 items-center gap-2.5">
+              <Mail className="size-4 shrink-0 text-accent" />
+              <a href={`mailto:${email}`} className="inline-flex min-h-11 items-center break-all hover:text-white">
                 {email}
               </a>
             </li>
@@ -43,20 +43,20 @@ export function Footer() {
           <h3 className="font-label text-xl uppercase tracking-wider text-white">
             Horarios de servicio
           </h3>
-          <ul className="mt-4 space-y-3">
+          <ul className="mt-3 space-y-1">
             {horarios.map((h) => (
               <li key={h} className="flex gap-2.5">
-                <Clock className="mt-0.5 size-4 shrink-0 text-accent" /> {h}
+                <Clock className="size-4 shrink-0 text-accent" /> {h}
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-white/10 px-5 py-6 text-center text-sm text-white/60">
+      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-white/10 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4 text-center text-sm text-white/60">
         <span>
           © {new Date().getFullYear()} {site.nombre}. Todos los derechos reservados.
         </span>
-        <Link href="/privacidad" className="underline underline-offset-4 hover:text-white">
+        <Link href="/privacidad" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-white">
           Política de privacidad
         </Link>
       </div>

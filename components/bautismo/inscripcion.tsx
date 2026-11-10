@@ -3,14 +3,13 @@
 import { useRef, useState } from "react"
 import { AlertCircle, Check, Clock, Loader2, MapPin, Phone, Send } from "lucide-react"
 import { site } from "@/lib/site"
-import { supabase } from "@/lib/supabase"
 
 const field =
   "w-full rounded-xl border border-input bg-background px-4 py-3 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15 aria-[invalid=true]:border-red-600 aria-[invalid=true]:focus:ring-red-600/15"
 
 // Opciones en forma de botón: el foco de teclado se ve con un anillo claro
 const opcion =
-  "cursor-pointer rounded-full border border-input px-5 py-2.5 text-sm transition hover:border-primary/60 has-[:checked]:border-primary has-[:checked]:bg-secondary has-[:checked]:text-primary has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary has-[:focus-visible]:ring-offset-2"
+  "inline-flex min-h-11 cursor-pointer items-center rounded-full border border-input px-5 text-sm transition hover:border-primary/60 has-[:checked]:border-primary has-[:checked]:bg-secondary has-[:checked]:text-primary has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary has-[:focus-visible]:ring-offset-2"
 
 const texto = (v: FormDataEntryValue | null) => {
   const s = String(v ?? "").trim()
@@ -81,12 +80,14 @@ export function Inscripcion() {
       return
     }
 
+    setEnviando(true)
+    // Supabase solo se descarga al enviar: la página carga más rápido en el móvil
+    const { supabase } = await import("@/lib/supabase")
     if (!supabase) {
+      setEnviando(false)
       setError(`El formulario no está disponible en este momento. Llámanos al ${site.contacto.telefono}.`)
       return
     }
-
-    setEnviando(true)
     const nac = String(d.get("fecha_nacimiento"))
     const { error } = await supabase.from("inscripciones_bautismo").insert({
       nombre: texto(d.get("nombre")),
@@ -127,30 +128,30 @@ export function Inscripcion() {
           {/* Alternativa al formulario: hablar directamente con la iglesia */}
           <div className="mt-12 border-t border-border pt-8">
             <h3 className="text-xl font-bold text-foreground">¿Prefieres hablarlo en persona?</h3>
-            <ul className="mt-4 space-y-3 text-lg text-muted-foreground">
-              <li className="flex items-start gap-3">
-                <Phone className="mt-1 size-5 shrink-0 text-primary" aria-hidden />
+            <ul className="mt-3 space-y-1 text-lg text-muted-foreground">
+              <li className="flex min-h-11 items-center gap-3">
+                <Phone className="size-5 shrink-0 text-primary" aria-hidden />
                 <a
                   href={`tel:${site.contacto.telefono.replace(/[^\d+]/g, "")}`}
-                  className="text-foreground underline decoration-primary/30 underline-offset-4 hover:decoration-primary"
+                  className="inline-flex min-h-11 items-center text-foreground underline decoration-primary/30 underline-offset-4 hover:decoration-primary"
                 >
                   {site.contacto.telefono}
                 </a>
               </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="mt-1 size-5 shrink-0 text-primary" aria-hidden />
+              <li className="flex min-h-11 items-center gap-3">
+                <MapPin className="size-5 shrink-0 text-primary" aria-hidden />
                 <a
                   href={site.contacto.mapa}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-foreground underline decoration-primary/30 underline-offset-4 hover:decoration-primary"
+                  className="inline-flex min-h-11 items-center text-foreground underline decoration-primary/30 underline-offset-4 hover:decoration-primary"
                 >
                   {site.contacto.direccion}
                 </a>
               </li>
               {site.contacto.horarios.map((h) => (
                 <li key={h} className="flex items-start gap-3">
-                  <Clock className="mt-1 size-5 shrink-0 text-primary" aria-hidden />
+                  <Clock className="size-5 shrink-0 text-primary" aria-hidden />
                   {h}
                 </li>
               ))}

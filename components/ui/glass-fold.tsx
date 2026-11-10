@@ -17,6 +17,10 @@ export interface GlassFoldProps {
   scale?: number
   /** Film grain, 0 to 0.5. */
   noise?: number
+  /** Max device pixel ratio. Default: 1 on phones/touch screens, 2 elsewhere. */
+  maxDpr?: number
+  /** Max frames per second. Default: 30 on phones/touch screens, 60 elsewhere. */
+  maxFps?: number
   className?: string
 }
 
@@ -129,6 +133,8 @@ export function GlassFold({
   speed = 0.5,
   scale = 1,
   noise = 0.12,
+  maxDpr,
+  maxFps,
   className,
 }: GlassFoldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -137,11 +143,42 @@ export function GlassFold({
   const props = useRef({ color1, color2, color3, speed, scale, noise })
   props.current = { color1, color2, color3, speed, scale, noise }
 
+  const limits = useRef({ maxDpr, maxFps })
+  limits.current = { maxDpr, maxFps }
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const gl = canvas.getContext("webgl", { antialias: false, alpha: false })
-    if (!gl) return
+
+    // Start after the page has painted its content, so the shader compile never
+    // delays the first paint or the main text on slow phones.
+    let teardown: (() => void) | null = null
+    let cancelled = false
+    const init = () => {
+      if (!cancelled) teardown = setup(canvas)
+    }
+    const idle = typeof window.requestIdleCallback === "function"
+    const handle = idle
+      ? window.requestIdleCallback(init, { timeout: 1000 })
+      : window.setTimeout(init, 300)
+    return () => {
+      cancelled = true
+      if (idle) window.cancelIdleCallback(handle)
+      else window.clearTimeout(handle)
+      teardown?.()
+    }
+  }, [])
+
+  function setup(canvas: HTMLCanvasElement) {
+    const gl = canvas.getContext("webgl", { antialias: false, alpha: false, powerPreference: "low-power" })
+    if (!gl) return null
+
+    // Phones and touch screens: fewer pixels and frames. The pattern is soft, so it looks the same.
+    const lowPower =
+      window.matchMedia("(pointer: coarse)").matches || window.matchMedia("(max-width: 767px)").matches
+    const dprCap = limits.current.maxDpr ?? (lowPower ? 1 : 2)
+    const fps = limits.current.maxFps ?? (lowPower ? 30 : 60)
+    const minInterval = 1000 / fps
 
     const program = gl.createProgram()!
     gl.attachShader(program, compile(gl, gl.VERTEX_SHADER, VERTEX))
@@ -172,7 +209,7 @@ export function GlassFold({
     }
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const dpr = Math.min(window.devicePixelRatio || 1, dprCap)
       const width = Math.max(1, Math.round(canvas.clientWidth * dpr))
       const height = Math.max(1, Math.round(canvas.clientHeight * dpr))
       if (canvas.width !== width || canvas.height !== height) {
@@ -185,6 +222,10 @@ export function GlassFold({
     let elapsed = 0
     let last: number | null = null
     let frame = 0
+    let lastDraw = -Infinity
+    let visible = true
+    let running = false
+    let shown = false
 
     const draw = (now: number) => {
       const p = props.current
@@ -201,14 +242,38 @@ export function GlassFold({
       gl.uniform1f(u.noise, p.noise)
       gl.uniform2f(u.resolution, canvas.width, canvas.height)
       gl.drawArrays(gl.TRIANGLES, 0, 6)
+      if (!shown) {
+        shown = true
+        canvas.style.opacity = "1"
+      }
     }
 
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     const loop = (now: number) => {
+      if (!visible) {
+        running = false
+        return
+      }
+      frame = requestAnimationFrame(loop)
+      if (now - lastDraw < minInterval - 2) return
+      lastDraw = now
       draw(now)
-      if (!still) frame = requestAnimationFrame(loop)
     }
-    frame = requestAnimationFrame(loop)
+    const start = () => {
+      if (running) return
+      running = true
+      last = null // resume without a jump
+      frame = requestAnimationFrame(loop)
+    }
+    if (still) draw(performance.now())
+    else start()
+
+    // Pause while the canvas is off screen (e.g. the visitor scrolled down).
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      if (visible && !still) start()
+    })
+    io.observe(canvas)
 
     // with motion off there is no loop, so repaint the still frame on resize
     const observer = new ResizeObserver(() => {
@@ -218,18 +283,19 @@ export function GlassFold({
 
     return () => {
       cancelAnimationFrame(frame)
+      io.disconnect()
       observer.disconnect()
       gl.deleteBuffer(buffer)
       gl.deleteProgram(program)
     }
-  }, [])
+  }
 
   return (
     <canvas
       ref={canvasRef}
       aria-hidden="true"
       className={className}
-      style={{ display: "block", width: "100%", height: "100%" }}
+      style={{ display: "block", width: "100%", height: "100%", opacity: 0, transition: "opacity 700ms ease" }}
     />
   )
 }
