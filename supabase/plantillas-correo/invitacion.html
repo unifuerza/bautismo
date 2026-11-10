@@ -1,16 +1,78 @@
-<h2 style="font-family:Arial,sans-serif;color:#0b1530">Bienvenido al panel del grupo de bautismo</h2>
-<p style="font-family:Arial,sans-serif;color:#333">
-  Te han dado acceso al panel interno del <strong>Centro de Ayuda Cristiano</strong>.
-</p>
-<p style="font-family:Arial,sans-serif;color:#333">
-  Pulsa el botón para confirmar tu correo y crear tu contraseña:
-</p>
-<p>
-  <a href="{{ .ConfirmationURL }}"
-     style="display:inline-block;background:#1e4fc8;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif;font-weight:bold">
-    Confirmar mi cuenta
-  </a>
-</p>
-<p style="font-family:Arial,sans-serif;color:#777;font-size:13px">
-  Si no esperabas este correo, puedes ignorarlo.
-</p>
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>Invitación al panel de bautismo</title>
+</head>
+<body style="margin:0;padding:0;width:100%;background-color:#eef3f8;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+  <!-- Texto de vista previa en la bandeja de entrada -->
+  <div style="display:none;max-height:0;max-width:0;overflow:hidden;opacity:0;mso-hide:all;font-size:1px;line-height:1px;color:#eef3f8;">
+    Activa tu cuenta para acceder al panel interno del grupo de bautismo.&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#eef3f8;">
+    <tr>
+      <td align="center" style="padding:40px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
+
+          <!-- Cabecera -->
+          <tr>
+            <td style="background-color:#06081e;border-radius:16px 16px 0 0;padding:28px 36px;">
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#96d7ff;">Panel interno · Grupo de bautismo</p>
+              <p style="margin:8px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:30px;color:#ffffff;">Centro de Ayuda Cristiano</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="height:4px;background-color:#1e4fc8;font-size:0;line-height:0;">&nbsp;</td>
+          </tr>
+
+          <!-- Contenido -->
+          <tr>
+            <td style="background-color:#ffffff;padding:40px 36px 12px;">
+              <h1 style="margin:0 0 20px;font-family:Arial,Helvetica,sans-serif;font-size:24px;line-height:32px;font-weight:bold;color:#0b1530;">Te damos la bienvenida al equipo</h1>
+              <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;color:#3b4660;">Hola,</p>
+              <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;color:#3b4660;">Te han invitado a formar parte del panel interno del grupo de bautismo del <strong style="color:#0b1530;">Centro de Ayuda Cristiano</strong>. Desde allí podrás acompañar a las personas que se preparan para bautizarse y colaborar con la organización de cada bautismo.</p>
+              <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;color:#3b4660;">Para activar tu cuenta, confirma tu correo y crea tu contraseña:</p>
+
+              <!-- Botón -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 24px;">
+                <tr>
+                  <td align="center" bgcolor="#1e4fc8" style="border-radius:999px;background-color:#1e4fc8;">
+                    <a href="{{ .ConfirmationURL }}" target="_blank" style="display:inline-block;padding:15px 34px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;line-height:20px;color:#ffffff;text-decoration:none;border-radius:999px;">Activar mi cuenta</a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#6b7690;">Por seguridad, este enlace es personal, solo puede usarse una vez y tiene una validez limitada. Si caduca, pide a un coordinador que te envíe una nueva invitación.</p>
+            </td>
+          </tr>
+
+          <!-- Enlace de respaldo -->
+          <tr>
+            <td style="background-color:#ffffff;padding:20px 36px 36px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td style="border-top:1px solid #e3e9f2;font-size:0;line-height:0;">&nbsp;</td></tr>
+              </table>
+              <p style="margin:20px 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#6b7690;">¿El botón no funciona? Copia y pega este enlace en tu navegador:</p>
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;word-break:break-all;"><a href="{{ .ConfirmationURL }}" target="_blank" style="color:#1e4fc8;text-decoration:underline;">{{ .ConfirmationURL }}</a></p>
+            </td>
+          </tr>
+
+          <!-- Pie -->
+          <tr>
+            <td style="background-color:#f7f9fc;border-radius:0 0 16px 16px;border-top:1px solid #e3e9f2;padding:24px 36px;">
+              <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:19px;color:#8792a8;">Has recibido este correo porque un coordinador ha dado acceso al panel a la dirección {{ .Email }}. Si no esperabas esta invitación, puedes ignorar este mensaje con tranquilidad.</p>
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:19px;color:#8792a8;">Centro de Ayuda Cristiano · Grupo de bautismo</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
