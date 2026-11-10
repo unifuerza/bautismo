@@ -26,6 +26,8 @@ export function Hero() {
       <GlassFold {...waterSettings} className="absolute inset-0" />
       {/* velo para legibilidad del texto */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-deep/40 via-deep/10 to-deep/80" />
+      {/* velo de lectura: oscurece los pliegues brillantes detrás del título y el versículo */}
+      <div className="pointer-events-none absolute inset-0 bg-deep/55 sm:bg-transparent sm:bg-gradient-to-r sm:from-deep/80 sm:via-deep/60 sm:to-deep/15" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-24 pt-32 sm:px-8">
         <motion.p
@@ -50,7 +52,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.25, ease }}
-          className="mt-8 max-w-xl border-l-2 border-accent/70 pl-5 text-base leading-relaxed text-white/80 sm:text-lg"
+          className="mt-8 max-w-xl border-l-2 border-accent/70 pl-5 text-base leading-relaxed text-white/90 sm:text-lg"
         >
           “Porque somos sepultados juntamente con él para muerte por el bautismo, a fin de que
           como Cristo resucitó de los muertos… así también nosotros andemos en vida nueva.”

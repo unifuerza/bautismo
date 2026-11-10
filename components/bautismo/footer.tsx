@@ -1,8 +1,9 @@
+import Link from "next/link"
 import { Clock, Droplets, Mail, MapPin, Phone } from "lucide-react"
 import { site } from "@/lib/site"
 
 export function Footer() {
-  const { direccion, telefono, email, horarios } = site.contacto
+  const { direccion, mapa, telefono, email, horarios } = site.contacto
   return (
     <footer className="bg-deep text-white/70">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-8 md:grid-cols-3">
@@ -19,7 +20,10 @@ export function Footer() {
           <h3 className="font-label text-xl uppercase tracking-wider text-white">Contacto</h3>
           <ul className="mt-4 space-y-3">
             <li className="flex gap-2.5">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-accent" /> {direccion}
+              <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
+              <a href={mapa} target="_blank" rel="noreferrer" className="hover:text-white">
+                {direccion}
+              </a>
             </li>
             <li className="flex gap-2.5">
               <Phone className="mt-0.5 size-4 shrink-0 text-accent" />
@@ -48,8 +52,13 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/10 py-6 text-center text-sm text-white/50">
-        © {new Date().getFullYear()} {site.nombre}. Todos los derechos reservados.
+      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-white/10 px-5 py-6 text-center text-sm text-white/60">
+        <span>
+          © {new Date().getFullYear()} {site.nombre}. Todos los derechos reservados.
+        </span>
+        <Link href="/privacidad" className="underline underline-offset-4 hover:text-white">
+          Política de privacidad
+        </Link>
       </div>
     </footer>
   )

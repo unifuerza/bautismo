@@ -69,6 +69,10 @@
 }
 
 @layer base {
+  /* deja sitio al menú fijo al saltar a una sección o a un campo con error */
+  html {
+    scroll-padding-top: 5.5rem;
+  }
   * {
     border-color: var(--border);
   }

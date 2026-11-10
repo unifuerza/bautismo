@@ -154,10 +154,10 @@ const traer = [
 
 export function ProximoBautismo() {
   const { fecha, hora, lugar } = site.proximoBautismo
-  const detalles = [
+  const detalles: { icon: typeof MapPin; label: string; value: string; href?: string }[] = [
     { icon: CalendarDays, label: "Fecha", value: fecha },
     { icon: Clock, label: "Hora", value: hora },
-    { icon: MapPin, label: "Lugar", value: lugar },
+    { icon: MapPin, label: "Lugar", value: lugar, href: site.contacto.mapa },
   ]
 
   return (
@@ -185,12 +185,25 @@ export function ProximoBautismo() {
               </h2>
 
               <dl className="mt-8 grid gap-5 sm:grid-cols-2">
-                {detalles.map(({ icon: Icon, label, value }) => (
+                {detalles.map(({ icon: Icon, label, value, href }) => (
                   <div key={label} className="flex gap-3 sm:last:col-span-2">
                     <Icon className="mt-0.5 size-5 shrink-0 text-accent" />
                     <div>
                       <dt className="font-label text-base uppercase tracking-wider text-white/50">{label}</dt>
-                      <dd className="mt-1 text-white/90">{value}</dd>
+                      <dd className="mt-1 text-white/90">
+                        {href ? (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                          >
+                            {value}
+                          </a>
+                        ) : (
+                          value
+                        )}
+                      </dd>
                     </div>
                   </div>
                 ))}
