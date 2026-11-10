@@ -116,3 +116,20 @@ Notas:
 - El modo `live` puede lanzar `claude`/`codex` sin pedir permisos para aplicar cambios; usarlo solo en local y
   con `IMPECCABLE_LIVE_COPY_AGENT=chat`.
 - Para actualizar: `npx impeccable update`.
+
+## Skill de diseño: UI/UX Pro Max
+
+En `.claude/skills/ui-ux-pro-max` está instalada la skill
+[UI/UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) v2.15.0 (licencia MIT), copiada del
+repositorio oficial. Es una base de datos local de diseño (80 estilos, 192 paletas, 74 combinaciones de
+tipografías, 120 pautas de UX, 25 tipos de gráfico, 22 tecnologías) con un buscador en Python sin
+dependencias ni acceso a internet. Claude la usa sola al diseñar o revisar interfaces; también se puede
+consultar a mano:
+
+```bash
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "church community" --design-system -p "Centro de Ayuda Cristiano"
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "form validation errors" --domain ux
+```
+
+Las rutas del `SKILL.md` se ajustaron a instalación de proyecto (igual que hace su instalador oficial
+`uipro init --ai claude`).
